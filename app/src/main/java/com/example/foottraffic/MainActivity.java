@@ -11,12 +11,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String venueName = "KFC";
-        String venueAddress = "Ocean Ave, San Fransisco";
-        String res = null;
-        res = ConnectAPIActivity.result(venueName, venueAddress);
-        // ConnectAPIActivity.main(venueName, venueAddress);
-        System.out.println("======" + res + "+++++");
+//        String venueName = "KFC";
+//        String venueAddress = "Ocean Ave, San Fransisco";
+//        String res = null;
+//        res = ConnectAPIActivity.result(venueName, venueAddress);
+//        // ConnectAPIActivity.main(venueName, venueAddress);
+//        System.out.println("======" + res + "+++++");
 
         TextView addressTv = findViewById(R.id.addressTv);
 
