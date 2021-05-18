@@ -16,7 +16,7 @@ interface APIInterfaceActivity {
 
     @FormUrlEncoded
     @POST("/api/v1/forecasts/live?")
-    Call<MultipleResourceActivity> doCreateInformationWithField(@Field("api_key_private") String api_key_private, @Query("venue_name") String venue_name, @Query("venue_address") String venue_address);
+    Call<MultipleResourceActivity> doCreateInformationWithField(@Field("api_key_private") String api_key_private, @Field("venue_name") String venue_name, @Field("venue_address") String venue_address);
 
 //    @GET("/api/unknown")
 //    Call<MultipleResource> doGetListResources();

@@ -17,19 +17,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class APIClientActivity {
 
     private static Retrofit retrofit = null;
-    private static String api_key_private = "pri_50990bf1f8828f6abbf6152013113c6b";
+    private static String api_key_private = "pri_e435dec0a2aa4b8e8b4ef42bc990f596";
     static String displayResponse = "";
 
     public static String getClient(String venue_name, String venue_address) {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://besttime.app")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
+//                .client(client)
                 .build();
 
         APIInterfaceActivity apiInterface = retrofit.create(APIInterfaceActivity.class);

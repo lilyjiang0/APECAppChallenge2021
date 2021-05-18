@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         }
         // API Part
         String result = APIClientActivity.getClient(venue_name, venue_address);
-        responseText.setText(result);
-        System.out.println(result.toString());
+        Log.d("Tag", result);
+//        System.out.println(result.toString());
 //        APIInterfaceActivity apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
 //        Call<MultipleResourceActivity> call = apiInterface.doCreateInformationWithField(api_key_private, venue_name, venue_address);
 //        call.enqueue(new Callback<MultipleResourceActivity>() {
