@@ -9,11 +9,11 @@ import java.util.List;
 public class MultipleResourceActivity {
 
     @SerializedName("analysis")
-    public List<AnalysisData> analysis = null;
+    public AnalysisData analysis;
     @SerializedName("status")
     public String status;
     @SerializedName("venue_info")
-    public List<VenueInfoData> venue_info = null;
+    public VenueInfoData venue_info;
 
     public class AnalysisData {
 
@@ -27,12 +27,13 @@ public class MultipleResourceActivity {
         public Integer venue_live_forecasted_delta;
 
     }
+
     public class VenueInfoData {
 
         @SerializedName("venue_current_gmttime")
-        public Date venue_current_gmttime;
+        public String venue_current_gmttime;
         @SerializedName("venue_current_localtime")
-        public Date venue_current_localtime;
+        public String venue_current_localtime;
         @SerializedName("venue_id")
         public String venue_id;
         @SerializedName("venue_name")
@@ -40,5 +41,29 @@ public class MultipleResourceActivity {
         @SerializedName("venue_timezone")
         public String venue_timezone;
 
+    }
+
+    public AnalysisData getAnalysis() {
+        return analysis;
+    }
+
+    public void setAnalysis(AnalysisData analysis) {
+        this.analysis = analysis;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public VenueInfoData getVenue_info() {
+        return venue_info;
+    }
+
+    public void setVenue_info(VenueInfoData venue_info) {
+        this.venue_info = venue_info;
     }
 }
