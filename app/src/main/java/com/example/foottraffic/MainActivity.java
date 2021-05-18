@@ -21,7 +21,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
-    private String api_key_private = "pri_50990bf1f8828f6abbf6152013113c6b";
+    private String api_key_private = "pri_e435dec0a2aa4b8e8b4ef42bc990f596";
     String venue_name = "McDonalds";
     String venue_address = "Ocean Ave, San Fransisco";
 
@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         // API Part
-        String result = APIClientActivity.getClient(venue_name, venue_address);
-        responseText.setText(result);
-        System.out.println(result.toString());
+//        String result = APIClientActivity.getClient(venue_name, venue_address);
+//        responseText.setText(result);
+//        System.out.println(result.toString());
 //        APIInterfaceActivity apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
 //        Call<MultipleResourceActivity> call = apiInterface.doCreateInformationWithField(api_key_private, venue_name, venue_address);
 //        call.enqueue(new Callback<MultipleResourceActivity>() {
