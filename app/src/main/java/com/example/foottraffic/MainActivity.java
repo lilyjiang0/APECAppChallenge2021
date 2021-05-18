@@ -21,7 +21,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
-    private String api_key_private = "pri_50990bf1f8828f6abbf6152013113c6b";
+    private String api_key_private = "pri_e435dec0a2aa4b8e8b4ef42bc990f596";
     String venue_name = "McDonalds";
     String venue_address = "Ocean Ave, San Fransisco";
 
