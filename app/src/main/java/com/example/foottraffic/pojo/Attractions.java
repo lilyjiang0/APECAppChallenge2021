@@ -1,5 +1,9 @@
 package com.example.foottraffic.pojo;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -313,8 +317,8 @@ public class Attractions {
 
     }
 
+    @Entity
     public class Venue {
-
         @SerializedName("forecast")
         @Expose
         private Boolean forecast;
@@ -331,6 +335,8 @@ public class Attractions {
         @Expose
         private Double venueLon;
         @SerializedName("venue_name")
+        @PrimaryKey
+        @NonNull
         @Expose
         private String venueName;
 

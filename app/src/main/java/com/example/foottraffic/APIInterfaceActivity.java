@@ -21,9 +21,9 @@ import retrofit2.http.Query;
 interface APIInterfaceActivity {
 
     @FormUrlEncoded
-    @POST("forecasts/live?api_key_private=pri_e435dec0a2aa4b8e8b4ef42bc990f596&venue_id=ven_51387131543761435650505241346a394a6432395362654a496843")
+    @POST("forecasts/live?api_key_private=pri_1008d36a82b4452393139213da2109c5&venue_id=ven_51387131543761435650505241346a394a6432395362654a496843")
     Call<MultipleResourceActivity> doCreateInformationWithField(@Field("api_key_private") String api_key_private, @Field("venue_address") String venue_address);
 
-    @GET("venues/progress?job_id=d753cbd3-fdb6-498c-a430-59f3a036f573&collection_id=col_a9f974716aba4995a4627538b5a2cad2&ven=False")
+    @GET("venues/progress?job_id=93db21d2-0168-441f-b1ad-f87815df025f&collection_id=col_c879e1e459f44b32965684febd87b434&ven=False")
     Call<Attractions> getAttraction();
 }
