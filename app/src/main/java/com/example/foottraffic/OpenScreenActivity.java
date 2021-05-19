@@ -109,7 +109,7 @@ public class OpenScreenActivity extends AppCompatActivity {
                                                 // prevent user go back to this activity
                                                 finish();
                                             }
-                                        }, 5000);
+                                        }, 3000);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -130,7 +130,7 @@ public class OpenScreenActivity extends AppCompatActivity {
                             // prevent user go back to this activity
                             finish();
                         }
-                    }, 5000);
+                    }, 3000);
                 }
                 return;
             }
