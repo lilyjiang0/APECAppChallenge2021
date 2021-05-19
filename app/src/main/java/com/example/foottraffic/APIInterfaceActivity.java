@@ -1,5 +1,6 @@
 package com.example.foottraffic;
 
+import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
 //import com.journaldev.retrofitintro.pojo.User;
 //import com.journaldev.retrofitintro.pojo.UserList;
@@ -20,33 +21,8 @@ interface APIInterfaceActivity {
 
     @FormUrlEncoded
     @POST("forecasts/live?api_key_private=pri_e435dec0a2aa4b8e8b4ef42bc990f596&venue_id=ven_51387131543761435650505241346a394a6432395362654a496843")
-//    Call<MultipleResourceActivity> doCreateInformationWithField(@Body RequestBody body);
-//    Call<MultipleResourceActivity> doCreateInformationWithField(@Body MultipleResourceActivity body);
     Call<MultipleResourceActivity> doCreateInformationWithField(@Field("api_key_private") String api_key_private, @Field("venue_address") String venue_address);
-//    Call<MultipleResourceActivity> doCreateInformationWithField(@Field("api_key_private") String api_key_private, @Field("venue_name") String venue_name, @Field("venue_address") String venue_address);
-    //    Call<MultipleResourceActivity> doCreateInformationWithField(@FieldMap Map<String, String> options);
 
-//    @GET("/api/unknown")
-//    Call<MultipleResource> doGetListResources();
-//
-//    @POST("/api/users")
-//    Call<User> createUser(@Body User user);
-//
-//    @GET("/api/users?")
-//    Call<UserList> doGetUserList(@Query("page") String page);
-//
-//    @FormUrlEncoded
-//    @POST("/api/users?")
-//    Call<UserList> doCreateUserWithField(@Field("name") String name, @Field("job") String job);
+    @POST("venues/search?api_key_private=pri_e435dec0a2aa4b8e8b4ef42bc990f596&q=things%20to%20do%20in%20sydney%20australia")
+    Call<Attractions> getAttraction();
 }
-
-// [4:42 pm] Yatong Jiang
-//@Headers({​​​​
-//        "x-rapidapi-key: 268c6724f0msh4b4ca443cbd44b4p169fd4jsnc94f0f37b97a",
-//        "Accept: application/json"
-//}​​​​)
-//@GET("?random=true&lettersMax=8")
-//Observable<Word> getRandomWord();
-
-// @GET("discover/movie?api_key={api_key}")
-//Call<List<MoviesResponse>> movieList(@Path("api_key") String api_key);}

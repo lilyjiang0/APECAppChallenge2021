@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
 
 import java.util.HashMap;
@@ -61,26 +62,49 @@ public class MainActivity extends AppCompatActivity {
         // API Part
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
         Map<String, String> params = new HashMap<>();
-        Call<MultipleResourceActivity> call = apiInterface.doCreateInformationWithField(getApi_key_private(), venue_address);
-        call.enqueue(new Callback<MultipleResourceActivity>() {
+//        Call<MultipleResourceActivity> call = apiInterface.doCreateInformationWithField(getApi_key_private(), venue_address);
+//        call.enqueue(new Callback<MultipleResourceActivity>() {
+//            @Override
+//            public void onResponse(Call<MultipleResourceActivity> call, Response<MultipleResourceActivity> response) {
+//                Log.d("Tag", "Code: " + response.code());
+//
+//                MultipleResourceActivity.AnalysisData analysisData = response.body().getAnalysis();
+//                MultipleResourceActivity.VenueInfoData venueInfoData = response.body().getVenue_info();
+//                String status = response.body().getStatus();
+//
+//                Log.d("===================", String.valueOf(analysisData.venue_forecasted_busyness));
+//
+//                responseText.setText(String.valueOf(analysisData.venue_forecasted_busyness));
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MultipleResourceActivity> call, Throwable t) {
+//                call.cancel();
+//                Log.d("ERROR", "Api call failed");
+//            }
+//        });
+
+
+        Call<Attractions> call = apiInterface.getAttraction();
+        call.enqueue(new Callback<Attractions>() {
             @Override
-            public void onResponse(Call<MultipleResourceActivity> call, Response<MultipleResourceActivity> response) {
-                Log.d("Tag", "Code: " + response.code());
+            public void onResponse(Call<Attractions> call, Response<Attractions> response) {
+                if (response.code() == 200) {
+                    Log.d("Tag", "Code: " + response.code());
 
-                MultipleResourceActivity.AnalysisData analysisData = response.body().getAnalysis();
-                MultipleResourceActivity.VenueInfoData venueInfoData = response.body().getVenue_info();
-                String status = response.body().getStatus();
+                    String venue = response.body().getVenues().get(0).getVenueName();
 
-                Log.d("===================", String.valueOf(analysisData.venue_forecasted_busyness));
+                    Log.d("===================", venue);
 
-//                displayResponse += String.valueOf(analysisData.venue_forecasted_busyness) + " " + analysisData.venue_live_busyness + " " + analysisData.venue_live_busyness_available + " " + analysisData.venue_live_forecasted_delta + "\n";
-//                displayResponse += venueInfoData.venue_current_gmttime + " " + venueInfoData.venue_current_localtime + " " + venueInfoData.venue_id + " " + venueInfoData.venue_name + venueInfoData.venue_timezone + "\n";
-                responseText.setText(String.valueOf(analysisData.venue_forecasted_busyness));
+                    responseText.setText(venue);
+                }
+
 
             }
 
             @Override
-            public void onFailure(Call<MultipleResourceActivity> call, Throwable t) {
+            public void onFailure(Call<Attractions> call, Throwable t) {
                 call.cancel();
                 Log.d("ERROR", "Api call failed");
             }
