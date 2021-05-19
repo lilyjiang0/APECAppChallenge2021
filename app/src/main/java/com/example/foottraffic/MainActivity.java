@@ -90,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Attractions>() {
             @Override
             public void onResponse(Call<Attractions> call, Response<Attractions> response) {
+                Log.d("Tag", "Code: " + response.code());
+
                 if (response.code() == 200) {
-                    Log.d("Tag", "Code: " + response.code());
 
                     String venue = response.body().getVenues().get(0).getVenueName();
 
