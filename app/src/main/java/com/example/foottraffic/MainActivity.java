@@ -33,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
         TextView responseText = findViewById(R.id.responseText);
 
         String city = getIntent().getStringExtra("USER_CITY");
+        String inputedCity = getIntent().getStringExtra("CITY");
         if (city != null) {
             addressTv.setText(city);
-        } else {
+        } else if (city == null && inputedCity == null){
             addressTv.setText("Set Location");
             addressTv.setTypeface(addressTv.getTypeface(), Typeface.BOLD_ITALIC);
             addressTv.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        } else if (city == null && inputedCity != null) {
+            addressTv.setText(inputedCity);
         }
         // API Part
         String result = APIClientActivity.getClient(venue_name, venue_address);

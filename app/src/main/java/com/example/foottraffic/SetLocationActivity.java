@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import java.util.List;
 
 public class SetLocationActivity extends AppCompatActivity {
     EditText enterAddTv;
+    Button okBtn;
+    String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,9 @@ public class SetLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_location);
 
         enterAddTv = findViewById(R.id.enterAddTv);
+        okBtn = findViewById(R.id.okBtn);
 
+        // autocomplete search
         Places.initialize(getApplicationContext(), "AIzaSyCsSbWv-fDswmMoEaTTlvsOCwfn06vOIR0");
         enterAddTv.setFocusable(false);
         enterAddTv.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +45,15 @@ public class SetLocationActivity extends AppCompatActivity {
                 startActivityForResult(intent, 100);
             }
         });
+        // OK button to Main
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SetLocationActivity.this, MainActivity.class);
+                intent.putExtra("CITY", city);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -47,7 +61,8 @@ public class SetLocationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
             Place place = Autocomplete.getPlaceFromIntent(data);
-            enterAddTv.setText(place.getAddress());
+            city = place.getName();
+            enterAddTv.setText(city);
 
         } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
             Status status = Autocomplete.getStatusFromIntent(data);
