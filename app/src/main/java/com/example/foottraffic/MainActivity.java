@@ -17,6 +17,7 @@ import androidx.room.Room;
 import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.database.AttractionsDatabase;
 import com.example.foottraffic.pojo.Attractions;
+import com.example.foottraffic.pojo.MultipleResourceActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +33,15 @@ public class MainActivity extends AppCompatActivity {
     private APIInterfaceActivity apiInterface;
     public AttractionsDatabase db;
     List<Attractions.Venue> attractionList = new ArrayList<>();
+    List<Attractions.Venue> forecastableAttractionList = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
     private int NUM_COLUMNS = 2;
-
+    private ArrayList<String> mDImage = new ArrayList<>();
+    private ArrayList<String> mDName = new ArrayList<>();
+    private ArrayList<String> mDKm = new ArrayList<>();
+    private String apiKey = "pri_1008d36a82b4452393139213da2109c5";
+    private Integer busy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +62,21 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
 
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
 
     }
 
     private void setUserCity() {
         TextView addressTv = findViewById(R.id.addressTv);
-        TextView responseText = findViewById(R.id.responseText);
         // set user's city
         String city = getIntent().getStringExtra("USER_CITY");
         String inputedCity = getIntent().getStringExtra("CITY");
@@ -82,6 +97,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initBrowseAllRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.browseAllRv);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, this);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+        recyclerView.setAdapter(browseAllAdapter);
+    }
+
+    private void initDiscoverRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.discoverRv);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mName, mImage, mDKm, this);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(discoverAdapter);
+    }
+
     private void getAttractionsFromApi() {
         // call api to get attrations
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
@@ -96,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     attractionList = response.body().getVenues();
                     for (int i = 0; i < attractionList.size(); i++) {
                         if (attractionList.get(i).getForecast() == true) {
+                            forecastableAttractionList.add(attractionList.get(i));
                             mName.add(attractionList.get(i).getVenueName());
                         }
                     }
@@ -110,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    RecyclerView attraction = findViewById(R.id.browseAllRv);
-                    initRecyclerView();
+//                    getForecastFromApi();
+                    initBrowseAllRecyclerView();
+                    initDiscoverRecyclerView();
 
                 }
             }
@@ -124,11 +158,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, this);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        recyclerView.setAdapter(browseAllAdapter);
+    private void getForecastFromApi() {
+        // call api to get forecast
+        apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+        for (int i = 0; i < forecastableAttractionList.size(); i++) {
+            Call<MultipleResourceActivity> call = apiInterface.getForecast(apiKey, forecastableAttractionList.get(i).getVenueName(), forecastableAttractionList.get(i).getVenueAddress());
+            try {
+                Response<MultipleResourceActivity> response = call.execute();
+                busy = response.body().getAnalysis().getVenue_live_busyness();
+                Log.d("=======================", "forecastableAttractionList.get(i).getVenueName()" + String.valueOf(busy));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
