@@ -1,4 +1,4 @@
-package com.example.foottraffic;
+package com.example.foottraffic.api;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

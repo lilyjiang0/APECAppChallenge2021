@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a2e24554b0a1b18fa1330f35d61ef0a3",
+    "entities": [
+      {
+        "tableName": "Venue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`forecast` INTEGER, `processed` INTEGER, `venueAddress` TEXT, `venueLat` REAL, `venueLon` REAL, `venueName` TEXT NOT NULL, PRIMARY KEY(`venueName`))",
+        "fields": [
+          {
+            "fieldPath": "forecast",
+            "columnName": "forecast",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "processed",
+            "columnName": "processed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "venueAddress",
+            "columnName": "venueAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "venueLat",
+            "columnName": "venueLat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "venueLon",
+            "columnName": "venueLon",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "venueName",
+            "columnName": "venueName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "venueName"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2e24554b0a1b18fa1330f35d61ef0a3')"
+    ]
+  }
+}
