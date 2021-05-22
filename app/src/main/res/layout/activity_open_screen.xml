@@ -4,32 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@mipmap/background">
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="402dp"
         android:layout_height="55dp"
         android:text="FootTaffic"
+        android:background="@drawable/gradient_background"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/white"
+        android:textColor="@drawable/gradient_background"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="123dp"
-        android:layout_height="52dp"
-        android:background="@drawable/gradient_background"
-        android:text="Start My Trip"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="498dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
