@@ -6,60 +6,47 @@
     android:layout_height="match_parent"
     android:background="@mipmap/open_screen"
     tools:context=".SetLocationActivity">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp">
-
-
-        <EditText
-            android:id="@+id/enterAddTv"
-            android:layout_width="229dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="40dp"
-            android:background="#AEFFFFFF"
-            android:hint="          🔍 Enter address"
-            app:layout_constraintEnd_toStartOf="@+id/okBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-
-        <Button
-            android:id="@+id/okBtn"
-            android:layout_width="66dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="24dp"
-            android:background="#E9045377"
-            android:scrollbarThumbHorizontal="?android:attr/textCursorDrawable"
-            android:text="OK"
-            android:textColor="#FFFFFF"
-            android:textDirection="firstStrongRtl"
-            android:textIsSelectable="false"
-            android:textScaleX="1"
-            app:layout_constraintBottom_toBottomOf="@+id/enterAddTv"
-            app:layout_constraintStart_toEndOf="@+id/enterAddTv"
-            app:layout_constraintTop_toTopOf="@+id/enterAddTv" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="184dp"
-            android:text="Enter Your Location"
-            android:textAlignment="gravity"
-            android:textAllCaps="true"
-            android:textColor="#067167"
-            android:textColorHint="#8D090202"
-            android:textColorLink="#371C1C"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <EditText
+        android:id="@+id/enterAddTv"
+        android:layout_width="229dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="36dp"
+        android:background="#AEFFFFFF"
+        android:hint="          🔍 Enter address"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_editor_absoluteX="56dp" />
+    <Button
+        android:id="@+id/okBtn"
+        android:layout_width="66dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="24dp"
+        android:background="#E9045377"
+        android:scrollbarThumbHorizontal="?android:attr/textCursorDrawable"
+        android:text="OK"
+        android:textColor="#FFFFFF"
+        android:textDirection="firstStrongRtl"
+        android:textIsSelectable="false"
+        android:textScaleX="1"
+        app:layout_constraintBottom_toBottomOf="@+id/enterAddTv"
+        app:layout_constraintStart_toEndOf="@+id/enterAddTv"
+        app:layout_constraintTop_toTopOf="@+id/enterAddTv" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="184dp"
+        android:text="Enter Your Location"
+        android:textAlignment="gravity"
+        android:textAllCaps="true"
+        android:textColor="#067167"
+        android:textColorHint="#8D090202"
+        android:textColorLink="#371C1C"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
