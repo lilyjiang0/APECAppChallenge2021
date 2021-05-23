@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="City"
+        android:text="@string/city"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,8 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Browse All"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="328dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/browse_all"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/browseAllRv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/discoverRv" />
 
@@ -44,7 +50,7 @@
         android:layout_width="409dp"
         android:layout_height="250dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +60,55 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Discover"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/discover"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/discoverRv"
         app:layout_constraintStart_toStartOf="@+id/addressTv"
         app:layout_constraintTop_toBottomOf="@+id/addressTv" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="319dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="50dp"
+        android:background="@mipmap/start_trip"
+        android:contentDescription="@string/click_to_start_trip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="322dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="170dp"
+        android:backgroundTint="#FDFDFD"
+        android:text="@string/see_more"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/browseAllRv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
