@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +16,28 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.room.Room;
 
 import com.example.foottraffic.api.APIClientActivity;
+import com.example.foottraffic.api.GoogleMapAPIClientActivity;
 import com.example.foottraffic.database.AttractionsDatabase;
+import com.example.foottraffic.database.StoreModel;
 import com.example.foottraffic.pojo.Attractions;
+import com.example.foottraffic.pojo.ResultDistanceMatrix;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -35,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
     private int NUM_COLUMNS = 2;
+
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+    private final static int ALL_PERMISSIONS_RESULT = 101;
+    List<StoreModel> storeModels;
 
 
     @Override
@@ -56,12 +80,15 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
 
-
+        String start = "Washington,DC";
+        String end = "New York City,NY";
+        fetchDistance(start, end);
+//        System.out.println("name is: " + storeModels + " total distance is: ");
     }
 
     private void setUserCity() {
         TextView addressTv = findViewById(R.id.addressTv);
-        TextView responseText = findViewById(R.id.responseText);
+//        TextView responseText = findViewById(R.id.responseText);
         // set user's city
         String city = getIntent().getStringExtra("USER_CITY");
         String inputedCity = getIntent().getStringExtra("CITY");
@@ -130,5 +157,42 @@ public class MainActivity extends AppCompatActivity {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
+    }
+
+    private void fetchDistance(String start_latLngString, String dest_latLngString) {
+
+        // destination: "locationA.lat" + "," + "locationA.lng"
+        apiInterface = GoogleMapAPIClientActivity.getClient().create(APIInterfaceActivity.class);
+        Call<ResultDistanceMatrix> call = apiInterface.getDistance(start_latLngString, dest_latLngString, GoogleMapAPIClientActivity.GOOGLE_PLACE_API_KEY);
+        call.enqueue(new Callback<ResultDistanceMatrix>() {
+            @Override
+            public void onResponse(Call<ResultDistanceMatrix> call, Response<ResultDistanceMatrix> response) {
+                ResultDistanceMatrix resultDistance = response.body();
+                if ("OK".equalsIgnoreCase(resultDistance.getStatus())) {
+//                    ResultDistanceMatrix.InfoDistanceMatrix infoDistanceMatrix = resultDistance.rows.get(0);
+//                    ResultDistanceMatrix.InfoDistanceMatrix.DistanceElement distanceElement = infoDistanceMatrix.elements.get(0);
+                    ResultDistanceMatrix.Row infoDistanceMatrix = resultDistance.getRows().get(0);
+                    ResultDistanceMatrix.Element distanceElement = infoDistanceMatrix.getElements().get(0);
+
+                    if ("OK".equalsIgnoreCase(distanceElement.getStatus())) {
+                        ResultDistanceMatrix.Duration itemDuration = distanceElement.getDuration();
+                        ResultDistanceMatrix.Distance itemDistance = distanceElement.getDistance();
+                        String totalDistance = itemDistance.getText();
+                        String totalDuration = itemDuration.getText();
+                        String name = resultDistance.getOriginAddresses().get(0);
+//                        storeModels.add(new StoreModel(name, "vicinity", totalDistance, totalDuration));
+//
+                    }
+                } else {
+                    System.out.println("Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultDistanceMatrix> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
     }
 }
