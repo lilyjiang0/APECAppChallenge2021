@@ -19,7 +19,7 @@ public class APIClientActivity {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://besttime.app/api/v1/")
-                .addConverterFactory(new NullOnEmptyConverterFactory())
+//                .addConverterFactory(new NullOnEmptyConverterFactory())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(clientBuilder.build())
