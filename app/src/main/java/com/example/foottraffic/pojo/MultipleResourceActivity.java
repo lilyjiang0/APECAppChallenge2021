@@ -72,6 +72,45 @@ public class MultipleResourceActivity {
         @SerializedName("venue_timezone")
         public String venue_timezone;
 
+        public String getVenue_current_gmttime() {
+            return venue_current_gmttime;
+        }
+
+        public void setVenue_current_gmttime(String venue_current_gmttime) {
+            this.venue_current_gmttime = venue_current_gmttime;
+        }
+
+        public String getVenue_current_localtime() {
+            return venue_current_localtime;
+        }
+
+        public void setVenue_current_localtime(String venue_current_localtime) {
+            this.venue_current_localtime = venue_current_localtime;
+        }
+
+        public String getVenue_id() {
+            return venue_id;
+        }
+
+        public void setVenue_id(String venue_id) {
+            this.venue_id = venue_id;
+        }
+
+        public String getVenue_name() {
+            return venue_name;
+        }
+
+        public void setVenue_name(String venue_name) {
+            this.venue_name = venue_name;
+        }
+
+        public String getVenue_timezone() {
+            return venue_timezone;
+        }
+
+        public void setVenue_timezone(String venue_timezone) {
+            this.venue_timezone = venue_timezone;
+        }
     }
 
     public AnalysisData getAnalysis() {

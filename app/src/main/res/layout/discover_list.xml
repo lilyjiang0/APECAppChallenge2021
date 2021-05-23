@@ -9,6 +9,7 @@
         android:id="@+id/discoverIv"
         android:layout_width="280dp"
         android:layout_height="250dp"
+        android:contentDescription="place cover"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +24,7 @@
         android:layout_marginBottom="8dp"
         android:background="#B7FFFFFF"
         android:text="TextView"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/discoverIv"
         app:layout_constraintStart_toStartOf="parent" />
@@ -33,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="km"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/discoverNameTv"
         app:layout_constraintTop_toTopOf="@+id/discoverNameTv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

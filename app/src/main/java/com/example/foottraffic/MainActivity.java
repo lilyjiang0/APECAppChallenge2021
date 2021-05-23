@@ -1,7 +1,13 @@
 package com.example.foottraffic;
 
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,14 +28,21 @@ import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDKm = new ArrayList<>();
     private String apiKey = "pri_1008d36a82b4452393139213da2109c5";
     private Integer busy;
+    private Integer number = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
         setUserCity();
         getAttractionsFromApi();
-        getForecastFromApi();
         mImage.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
         mImage.add("https://images.unsplash.com/photo-1620943694949-b438574c75a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80");
         mImage.add("https://images.unsplash.com/photo-1558949315-d484360311fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=967&q=80");
@@ -89,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         mDKm.add("1km");
         mDKm.add("1km");
         mDKm.add("1km");
+
 
     }
 
@@ -145,12 +160,21 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     attractionList = response.body().getVenues();
                     for (int i = 0; i < attractionList.size(); i++) {
-                        if (attractionList.get(i).getForecast() == true) {
+                        if (attractionList.get(i).getForecast()) {
                             forecastableAttractionList.add(attractionList.get(i));
                             mName.add(attractionList.get(i).getVenueName());
                         }
                     }
                     Log.d("---------------------------", String.valueOf(mName.size()));
+                    Log.d("---------------------------", String.valueOf(forecastableAttractionList.size()));
+//                    Log.d("---------------------------", forecastableAttractionList.get(number).getVenueName());
+//                    Log.d("---------------------------", forecastableAttractionList.get(number).getVenueAddress());
+                    for(Attractions.Venue venue : forecastableAttractionList) {
+                        System.out.println(venue.getVenueName() + venue.getVenueAddress());
+                    }
+
+
+
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
@@ -161,10 +185,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-//                    getForecastFromApi();
                     initBrowseAllRecyclerView();
-
-
+                    getForecastFromApi();
                 }
             }
 
@@ -179,53 +201,58 @@ public class MainActivity extends AppCompatActivity {
     private void getForecastFromApi() {
         // call api to get forecast
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
-//        for (int i = 0; i < forecastableAttractionList.size(); i++) {
-//            Call<MultipleResourceActivity> call = apiInterface.getForecast(apiKey, forecastableAttractionList.get(i).getVenueName(), forecastableAttractionList.get(i).getVenueAddress());
-//            try {
-//                Response<MultipleResourceActivity> response = call.execute();
-//                busy = response.body().getAnalysis().getVenue_live_busyness();
-//                Log.d("=======================", "forecastableAttractionList.get(i).getVenueName()" + String.valueOf(busy));
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+        if (number < forecastableAttractionList.size()) {
+            Observable<MultipleResourceActivity> observable = apiInterface.getForecast(apiKey, forecastableAttractionList.get(number).getVenueName(), forecastableAttractionList.get(number).getVenueAddress());
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<MultipleResourceActivity>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
 
-        List<Observable<MultipleResourceActivity>> requests = new ArrayList<>();
-        for (int i = 0; i < forecastableAttractionList.size(); i++) {
-            requests.add(apiInterface.getForecast(apiKey, forecastableAttractionList.get(i).getVenueName(), forecastableAttractionList.get(i).getVenueAddress()));
-        }
+                        }
 
-        Observable.zip(
-                requests,
-                new Function<Object[], Object>() {
-                    @Override
-                    public Object apply(Object[] objects) throws Exception {
-                        // Objects[] is an array of combined results of completed requests
-                        // do something with those results and emit new event
-                        Log.d("=======================", "API CALLED");
-                        return new Object();
-                    }
-                })
-                // After all requests had been performed the next observer will receive the Object, returned from Function
-                .subscribe(
-                        // Will be triggered if all requests will end successfully (4xx and 5xx also are successful requests too)
-                        new Consumer<Object>() {
-                            @Override
-                            public void accept(Object o) throws Exception {
-                                //Do something on successful completion of all requests
-                                initDiscoverRecyclerView();
+                        @Override
+                        public void onNext(@NonNull MultipleResourceActivity data) {
+                            try {
+                                Log.d("getVenue_name", String.valueOf(number) + String.valueOf(data.getVenue_info().getVenue_name()));
+                            } catch (Exception e) {
+                                Log.d("----------------", "NO");
                             }
-                        },
 
-                        // Will be triggered if any error during requests will happen
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable e) throws Exception {
-                                //Do something on error completion of requests
-                                Log.d("=======================", "API CALL ERROR");
+                            try {
+                                Log.d("getVenue_live_busyness", String.valueOf(number) + String.valueOf(data.getAnalysis().getVenue_live_busyness()));
+                            } catch (Exception e) {
+                                Log.d("----------------", "NO");
+                            }
+
+
+                            if (number < forecastableAttractionList.size()) {
+                                number++;
+                                getForecastFromApi();
+                            } else {
+//                            Executors.newSingleThreadExecutor().execute(() -> {
+//                                // insert success word;
+//                                db.wordDao().insert(wordList.toArray(new Word[0]));
+//                            });
+//                            refreshData();
                             }
                         }
-                );
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            e.printStackTrace();
+                            Log.d("=======================", "API CALL ERROR");
+                            number++;
+                            getForecastFromApi();
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.d("======================", "complete");
+                        }
+                    });
+        }
+
     }
 
     private void fetchDistance(String start_latLngString, String dest_latLngString) {
