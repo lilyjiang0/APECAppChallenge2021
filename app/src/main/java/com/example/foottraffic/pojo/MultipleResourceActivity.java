@@ -26,6 +26,37 @@ public class MultipleResourceActivity {
         @SerializedName("venue_live_forecasted_delta")
         public Integer venue_live_forecasted_delta;
 
+        public Integer getVenue_forecasted_busyness() {
+            return venue_forecasted_busyness;
+        }
+
+        public void setVenue_forecasted_busyness(Integer venue_forecasted_busyness) {
+            this.venue_forecasted_busyness = venue_forecasted_busyness;
+        }
+
+        public Integer getVenue_live_busyness() {
+            return venue_live_busyness;
+        }
+
+        public void setVenue_live_busyness(Integer venue_live_busyness) {
+            this.venue_live_busyness = venue_live_busyness;
+        }
+
+        public Boolean getVenue_live_busyness_available() {
+            return venue_live_busyness_available;
+        }
+
+        public void setVenue_live_busyness_available(Boolean venue_live_busyness_available) {
+            this.venue_live_busyness_available = venue_live_busyness_available;
+        }
+
+        public Integer getVenue_live_forecasted_delta() {
+            return venue_live_forecasted_delta;
+        }
+
+        public void setVenue_live_forecasted_delta(Integer venue_live_forecasted_delta) {
+            this.venue_live_forecasted_delta = venue_live_forecasted_delta;
+        }
     }
 
     public class VenueInfoData {

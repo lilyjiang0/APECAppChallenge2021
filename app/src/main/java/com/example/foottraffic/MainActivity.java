@@ -1,15 +1,13 @@
 package com.example.foottraffic;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -20,28 +18,18 @@ import com.example.foottraffic.api.GoogleMapAPIClientActivity;
 import com.example.foottraffic.database.AttractionsDatabase;
 import com.example.foottraffic.database.StoreModel;
 import com.example.foottraffic.pojo.Attractions;
+import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private APIInterfaceActivity apiInterface;
     public AttractionsDatabase db;
     List<Attractions.Venue> attractionList = new ArrayList<>();
+    List<Attractions.Venue> forecastableAttractionList = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
     private int NUM_COLUMNS = 2;
@@ -60,7 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     List<StoreModel> storeModels;
 
-
+    private ArrayList<String> mDImage = new ArrayList<>();
+    private ArrayList<String> mDName = new ArrayList<>();
+    private ArrayList<String> mDKm = new ArrayList<>();
+    private String apiKey = "pri_1008d36a82b4452393139213da2109c5";
+    private Integer busy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUserCity();
         getAttractionsFromApi();
+        getForecastFromApi();
         mImage.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
         mImage.add("https://images.unsplash.com/photo-1620943694949-b438574c75a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80");
         mImage.add("https://images.unsplash.com/photo-1558949315-d484360311fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=967&q=80");
@@ -84,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
         String end = "New York City,NY";
         fetchDistance(start, end);
 //        System.out.println("name is: " + storeModels + " total distance is: ");
+
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+        mDKm.add("1km");
+
     }
 
     private void setUserCity() {
@@ -109,6 +115,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initBrowseAllRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.browseAllRv);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, this);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+        recyclerView.setAdapter(browseAllAdapter);
+    }
+
+    private void initDiscoverRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.discoverRv);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mName, mImage, mDKm, this);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(discoverAdapter);
+    }
+
     private void getAttractionsFromApi() {
         // call api to get attrations
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
@@ -123,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     attractionList = response.body().getVenues();
                     for (int i = 0; i < attractionList.size(); i++) {
                         if (attractionList.get(i).getForecast() == true) {
+                            forecastableAttractionList.add(attractionList.get(i));
                             mName.add(attractionList.get(i).getVenueName());
                         }
                     }
@@ -137,8 +161,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    RecyclerView attraction = findViewById(R.id.browseAllRv);
-                    initRecyclerView();
+//                    getForecastFromApi();
+                    initBrowseAllRecyclerView();
+
 
                 }
             }
@@ -151,12 +176,56 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, this);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        recyclerView.setAdapter(browseAllAdapter);
+    private void getForecastFromApi() {
+        // call api to get forecast
+        apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+//        for (int i = 0; i < forecastableAttractionList.size(); i++) {
+//            Call<MultipleResourceActivity> call = apiInterface.getForecast(apiKey, forecastableAttractionList.get(i).getVenueName(), forecastableAttractionList.get(i).getVenueAddress());
+//            try {
+//                Response<MultipleResourceActivity> response = call.execute();
+//                busy = response.body().getAnalysis().getVenue_live_busyness();
+//                Log.d("=======================", "forecastableAttractionList.get(i).getVenueName()" + String.valueOf(busy));
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+
+        List<Observable<MultipleResourceActivity>> requests = new ArrayList<>();
+        for (int i = 0; i < forecastableAttractionList.size(); i++) {
+            requests.add(apiInterface.getForecast(apiKey, forecastableAttractionList.get(i).getVenueName(), forecastableAttractionList.get(i).getVenueAddress()));
+        }
+
+        Observable.zip(
+                requests,
+                new Function<Object[], Object>() {
+                    @Override
+                    public Object apply(Object[] objects) throws Exception {
+                        // Objects[] is an array of combined results of completed requests
+                        // do something with those results and emit new event
+                        Log.d("=======================", "API CALLED");
+                        return new Object();
+                    }
+                })
+                // After all requests had been performed the next observer will receive the Object, returned from Function
+                .subscribe(
+                        // Will be triggered if all requests will end successfully (4xx and 5xx also are successful requests too)
+                        new Consumer<Object>() {
+                            @Override
+                            public void accept(Object o) throws Exception {
+                                //Do something on successful completion of all requests
+                                initDiscoverRecyclerView();
+                            }
+                        },
+
+                        // Will be triggered if any error during requests will happen
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable e) throws Exception {
+                                //Do something on error completion of requests
+                                Log.d("=======================", "API CALL ERROR");
+                            }
+                        }
+                );
     }
 
     private void fetchDistance(String start_latLngString, String dest_latLngString) {
