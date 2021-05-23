@@ -11,7 +11,9 @@
         android:layout_height="match_parent"
         android:background="@mipmap/background"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp"><![CDATA[
+        tools:layout_editor_absoluteY="16dp">
+
+        <![CDATA[
 
         android:hyphenationFrequency="normal"
             tools:layout_editor_absoluteX="97dp"
