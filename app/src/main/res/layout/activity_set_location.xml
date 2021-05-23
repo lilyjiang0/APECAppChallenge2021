@@ -7,30 +7,6 @@
     android:background="@mipmap/open_screen"
     tools:context=".SetLocationActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/open_screen"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp">
-
-        <![CDATA[
-
-        android:hyphenationFrequency="normal"
-            tools:layout_editor_absoluteX="97dp"
-            tools:layout_editor_absoluteY="190dp" />
-
-
-
-
-
-
-
-
-
-
-        ]]>
-
         <EditText
             android:id="@+id/enterAddTv"
             android:layout_width="229dp"
@@ -74,6 +50,6 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
