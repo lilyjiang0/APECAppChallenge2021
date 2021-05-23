@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">FootTraffic</string>
+<<<<<<< HEAD
     <string name="browse_all">Browse All</string>
     <string name="discover">Discover</string>
     <string name="city">City</string>
     <string name="click_to_start_trip">Click here to generate your best trip</string>
     <string name="see_more">See more</string>
 
+=======
+    <string name="title_activity_maps">Map</string>
+>>>>>>> 97bd6b0b140e50deeb917e77462e991cdc425ae9
 </resources>
