@@ -2,6 +2,7 @@ package com.example.foottraffic;
 
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
+import com.example.foottraffic.pojo.ResultDistanceMatrix;
 //import com.journaldev.retrofitintro.pojo.User;
 //import com.journaldev.retrofitintro.pojo.UserList;
 
@@ -30,4 +31,7 @@ interface APIInterfaceActivity {
     @GET("venues/progress?job_id=93db21d2-0168-441f-b1ad-f87815df025f&collection_id=col_c879e1e459f44b32965684febd87b434&ven=False")
     Call<Attractions> getAttraction();
 
+    // google map
+    @GET("distancematrix/json") // origins/destinations:  LatLng as string
+    Call<ResultDistanceMatrix> getDistance(@Query("origins") String origins, @Query("destinations") String destinations, @Query("key") String key);
 }
