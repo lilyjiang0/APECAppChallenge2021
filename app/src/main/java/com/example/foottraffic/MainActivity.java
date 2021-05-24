@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,13 +19,13 @@ import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.api.GoogleMapAPIClientActivity;
 import com.example.foottraffic.database.AttractionsDatabase;
 import com.example.foottraffic.database.StoreModel;
+import com.example.foottraffic.pojo.AttractionQuietHours;
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private ImageView generateTripIv;
     private APIInterfaceActivity apiInterface;
     public AttractionsDatabase db;
     List<Attractions.Venue> attractionList = new ArrayList<>();
@@ -66,13 +68,26 @@ public class MainActivity extends AppCompatActivity {
     private String addressInputForApi = "";
     List<DiscoverListData> discoverListData = new ArrayList<DiscoverListData>();
 
+    private String api_key_public_besttime = "pub_e6af9cfdcffc4b5da127d98fec9a9b89";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        generateTripIv = findViewById(R.id.generateTripIv);
+        generateTripIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // button 1 was clicked!
+                Intent intent = new Intent(MainActivity.this, GenerateTripActivity.class);
+                startActivity(intent);
+            }
+        });
         db = Room.databaseBuilder(getApplicationContext(), AttractionsDatabase.class, "attraction-database").allowMainThreadQueries().build();
 
+//        getAttractionQuietHours("ven_63546a446179304b43514352736d45756530573374614c4a496843", 0);
+//
         String start = "Washington,DC";
         String end = "New York City,NY";
         fetchDistance(start, end);
@@ -297,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    System.out.println("Cohde: " + response.code());
+                    System.out.println("Code: " + response.code());
                 }
             }
 
@@ -321,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                         mDKm.add(resultDistance.getRows().get(i).getElements().get(0).getDistance().getText());
                     }
                 } else {
-                    System.out.println("Cohde: " + response.code());
+                    System.out.println("Code: " + response.code());
                 }
             }
 
@@ -332,4 +347,39 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+//    private void getAttractionQuietHours(String venue_id, Integer day_step) {
+//        apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+//        Call<AttractionQuietHours> call = apiInterface.getQuietHours(api_key_public_besttime, venue_id, day_step);
+//        call.enqueue(new Callback<AttractionQuietHours>() {
+//            @Override
+//            public void onResponse(Call<AttractionQuietHours> call, Response<AttractionQuietHours> response) {
+////                AttractionQuietHours quietHoursLists = response.body();
+//                System.out.println("response code is: " + response.code());
+//                try {
+//                    System.out.println("response error is: " + response.errorBody().string());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+////                List<Integer> quietHours = quietHoursLists.getAnalysis().getQuietHoursList();
+////                for (int i = 0; i < quietHours.size() - 1; i++) {
+//////                    System.out.println("old: " + quietHours.get(i));
+////                    if (quietHours.get(i) >= quietHours.get(i + 1)) {
+////                        for (int j = i + 1; j < quietHours.size(); j++) {
+////                            Integer newVal = 12 + quietHours.get(j);
+////                            quietHours.set(j, newVal);
+////                        }
+////                    }
+//////                    System.out.println("new: " + quietHours.get(i));
+////                }
+////                System.out.println("Code is: " + response.code());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<AttractionQuietHours> call, Throwable t) {
+//                call.cancel();
+//            }
+//        });
+//
+//    }
 }
