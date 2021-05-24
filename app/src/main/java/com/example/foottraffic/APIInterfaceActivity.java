@@ -23,8 +23,8 @@ public interface APIInterfaceActivity {
     @GET("venues/progress?job_id=93db21d2-0168-441f-b1ad-f87815df025f&collection_id=col_c879e1e459f44b32965684febd87b434&ven=False")
     Call<Attractions> getAttraction();
 
-    @GET("forecasts/quiet")
-    Call<AttractionQuietHours> getQuietHours(@Query("api_key_public") String api_key_public, @Query("venue_id") String venue_id);
+//    @GET("forecasts/quiet")
+//    Call<AttractionQuietHours> getQuietHours(@Query("api_key_public") String api_key_public, @Query("venue_id") String venue_id, @Query("day_step") Integer day_step);
 
     // google map
     @GET("distancematrix/json") // origins/destinations:  LatLng as string
