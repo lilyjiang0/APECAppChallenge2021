@@ -12,7 +12,7 @@
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@drawable/gradient_background"
+        android:textColor="@color/purple_500"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
