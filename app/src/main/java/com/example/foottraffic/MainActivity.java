@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     List<Attractions.Venue> forecastableAttractionList = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
+    private ArrayList<Integer> mBusy = new ArrayList<>();
     private int NUM_COLUMNS = 2;
 
     private ArrayList<String> permissionsToRequest;
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBrowseAllRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, this);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy,this);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
@@ -167,13 +168,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Log.d("---------------------------", String.valueOf(mName.size()));
                     Log.d("---------------------------", String.valueOf(forecastableAttractionList.size()));
-//                    Log.d("---------------------------", forecastableAttractionList.get(number).getVenueName());
-//                    Log.d("---------------------------", forecastableAttractionList.get(number).getVenueAddress());
+
                     for(Attractions.Venue venue : forecastableAttractionList) {
                         System.out.println(venue.getVenueName() + venue.getVenueAddress());
                     }
-
-
 
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
@@ -185,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    initBrowseAllRecyclerView();
                     getForecastFromApi();
                 }
             }
@@ -220,16 +217,19 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             try {
+                                mBusy.add(data.getAnalysis().getVenue_live_busyness());
                                 Log.d("getVenue_live_busyness", String.valueOf(number) + String.valueOf(data.getAnalysis().getVenue_live_busyness()));
                             } catch (Exception e) {
                                 Log.d("----------------", "NO");
                             }
 
 
-                            if (number < forecastableAttractionList.size()) {
+                            if (number < forecastableAttractionList.size() - 1) {
                                 number++;
                                 getForecastFromApi();
                             } else {
+                                initBrowseAllRecyclerView();
+
 //                            Executors.newSingleThreadExecutor().execute(() -> {
 //                                // insert success word;
 //                                db.wordDao().insert(wordList.toArray(new Word[0]));
@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onError(@NonNull Throwable e) {
                             e.printStackTrace();
                             Log.d("=======================", "API CALL ERROR");
+                            mBusy.add(0);
                             number++;
                             getForecastFromApi();
                         }
@@ -252,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-
     }
 
     private void fetchDistance(String start_latLngString, String dest_latLngString) {

@@ -22,11 +22,13 @@ import java.util.ArrayList;
 public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.ViewHolder>{
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
+    private ArrayList<Integer> mBusy = new ArrayList<>();
     private Context mContext;
 
-    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, Context mContext) {
+    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
+        this.mBusy = mBusy;
         this.mContext = mContext;
     }
 
@@ -47,6 +49,11 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 .apply(new RequestOptions().override(600, 200))
                 .into(holder.image);
         holder.name.setText(mName.get(position));
+        if (mBusy.get(position) != 0) {
+            holder.busy.setText(mBusy.get(position) + "");
+        } else {
+            holder.busy.setText("");
+        }
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,11 +70,13 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
         TextView name;
+        TextView busy;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             this.image = itemView.findViewById(R.id.browseAllIv);
             this.name = itemView.findViewById(R.id.browseAllName);
+            this.busy = itemView.findViewById(R.id.browseAllBusy);
         }
     }
 }
