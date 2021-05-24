@@ -30,6 +30,8 @@ import java.util.TimerTask;
 public class OpenScreenActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private String city;
+    private String address;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class OpenScreenActivity extends AppCompatActivity {
                                 List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
                                 // get city of the user
                                 city = addresses.get(0).getLocality();
+                                address = addresses.get(0).getAddressLine(0);
                                 // go to main page in 3 seconds
                                 Timer timer = new Timer();
                                 timer.schedule(new TimerTask() {
@@ -60,6 +63,7 @@ public class OpenScreenActivity extends AppCompatActivity {
                                     public void run() {
                                         Intent intent = new Intent(OpenScreenActivity.this, MainActivity.class);
                                         intent.putExtra("USER_CITY", city);
+                                        intent.putExtra("USER_ADDRESS", address);
                                         startActivity(intent);
                                         // prevent user go back to this activity
                                         finish();

@@ -3,22 +3,22 @@ package com.example.foottraffic.database;
 public class StoreModel {
 
 
-    public String name, address, distance, duration;
+    public String originAddress, destinationAddress, distance, duration;
 
-    public StoreModel(String name, String address, String distance, String duration) {
+    public StoreModel(String originAddress, String destinationAddress, String distance, String duration) {
 
-        this.name = name;
-        this.address = address;
+        this.originAddress = originAddress;
+        this.destinationAddress = destinationAddress;
         this.distance = distance;
         this.duration = duration;
     }
 
-    public String getName() {
-        return name;
+    public String getOriginAddress() {
+        return originAddress;
     }
 
-    public String getAddress() {
-        return address;
+    public String getDestinationAddress() {
+        return destinationAddress;
     }
 
     public String getDistance() {

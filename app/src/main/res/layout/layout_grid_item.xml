@@ -29,6 +29,17 @@
                 android:layout_below="@id/browseAllIv"
                 android:layout_marginTop="10dp"
                 android:textColor="#100"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/browseAllName"
+                android:text='Busyness'
+                android:id="@+id/browseAllBusy"
+                android:layout_below="@id/browseAllIv"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+
+                android:textColor="#100"/>
         </RelativeLayout>
   </androidx.cardview.widget.CardView>
 </RelativeLayout>

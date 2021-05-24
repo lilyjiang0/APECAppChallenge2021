@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHolder>{
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
-    private ArrayList<String> mKm = new ArrayList<>();
+    private ArrayList<Double> mKm = new ArrayList<>();
     private Context mContext;
 
-    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mKm, Context mContext) {
+    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Double> mKm, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mKm = mKm;
@@ -49,7 +49,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
                 .apply(new RequestOptions().override(600, 200))
                 .into(holder.image);
         holder.name.setText(mName.get(position));
-        holder.km.setText(mKm.get(position));
+        holder.km.setText(mKm.get(position) + " km");
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
