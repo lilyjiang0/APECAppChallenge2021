@@ -1,6 +1,7 @@
 package com.example.foottraffic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,14 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
+    private ArrayList<String> mAddress = new ArrayList<>();
     private Context mContext;
 
-    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, Context mContext) {
+    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, ArrayList<String> mAddress, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mBusy = mBusy;
+        this.mAddress = mAddress;
         this.mContext = mContext;
     }
 
@@ -49,7 +52,7 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 .apply(new RequestOptions().override(600, 200))
                 .into(holder.image);
         holder.name.setText(mName.get(position));
-        if (mBusy.get(position) != 0 && mBusy.get(position) != null) {
+        if (mBusy.get(position) != 0 && mBusy.get(position) != -100) {
             holder.busy.setText(mBusy.get(position) + "");
         } else {
             holder.busy.setText("");
@@ -57,7 +60,11 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mName.get(position), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, mName.get(position), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, AttractionDetailActivity.class);
+                intent.putExtra("VENUE_NAME", mName.get(position));
+                intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
+                mContext.startActivity(intent);
             }
         });
     }

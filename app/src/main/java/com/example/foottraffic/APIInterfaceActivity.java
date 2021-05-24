@@ -2,6 +2,7 @@ package com.example.foottraffic;
 
 import com.example.foottraffic.pojo.AttractionQuietHours;
 import com.example.foottraffic.pojo.Attractions;
+import com.example.foottraffic.pojo.ForecastData;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
@@ -14,9 +15,10 @@ import retrofit2.http.Query;
 public interface APIInterfaceActivity {
 
     @POST("forecasts/live")
-    Observable<MultipleResourceActivity> getForecast(@Query("api_key_private") String api_key_private, @Query("venue_name") String venue_name, @Query("venue_address") String venue_address);
-//    Call<MultipleResourceActivity> getForecast(@Query("api_key_private") String api_key_private, @Query("venue_name") String venue_name, @Query("venue_address") String venue_address);
+    Observable<MultipleResourceActivity> getForecastLive(@Query("api_key_private") String api_key_private, @Query("venue_name") String venue_name, @Query("venue_address") String venue_address);
 
+    @POST("forecasts")
+    Call<ForecastData> getForecast(@Query("api_key_private") String api_key_private, @Query("venue_name") String venue_name, @Query("venue_address") String venue_address);
 
     @GET("venues/progress?job_id=93db21d2-0168-441f-b1ad-f87815df025f&collection_id=col_c879e1e459f44b32965684febd87b434&ven=False")
     Call<Attractions> getAttraction();

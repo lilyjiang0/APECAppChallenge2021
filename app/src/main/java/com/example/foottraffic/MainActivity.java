@@ -26,6 +26,8 @@ import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
+    private ArrayList<String> mAddress = new ArrayList<>();
     private int NUM_COLUMNS = 2;
 
     private ArrayList<String> permissionsToRequest;
@@ -61,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDImage = new ArrayList<>();
     private ArrayList<String> mDName = new ArrayList<>();
     private ArrayList<String> mDKm = new ArrayList<>();
-    private ArrayList<Integer> mDKmInt = new ArrayList<>();
+    private ArrayList<Double> mDKmDou = new ArrayList<>();
+    private ArrayList<Integer> mDBusy = new ArrayList<>();
+    private ArrayList<String> mDAddress = new ArrayList<>();
     private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
     private String userLocation;
@@ -92,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         String end = "New York City,NY";
         fetchDistance(start, end);
 
-
         setUserCity();
         getAttractionsFromApi();
         mImage.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
@@ -105,22 +109,21 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1580420832496-de48689556ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80");
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
-
-
-
     }
 
     private void setUserCity() {
         TextView addressTv = findViewById(R.id.addressTv);
-//        TextView responseText = findViewById(R.id.responseText);
-        // set user's city
+        // get info from other activities
         String city = getIntent().getStringExtra("USER_CITY");
         String address = getIntent().getStringExtra("USER_ADDRESS");
         String inputedCity = getIntent().getStringExtra("CITY");
+        // set user's city
         if (city != null) {
+            // if info come from open screen
             addressTv.setText(city);
             userLocation = address;
         } else if (city == null && inputedCity == null) {
+            // if no info
             addressTv.setText("Set Location");
             addressTv.setTypeface(addressTv.getTypeface(), Typeface.BOLD_ITALIC);
             addressTv.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else if (city == null && inputedCity != null) {
+            // if info from set location
             addressTv.setText(inputedCity);
             userLocation = inputedCity;
 
@@ -138,26 +142,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBrowseAllRecyclerView() {
+        // initialise recyclerview for browse all list
         RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy,this);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, this);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
     }
 
     private void initDiscoverRecyclerView() {
-//        for(String s : mDKm) {
-//            mDKmInt.add(Integer.valueOf(s));
-//        }
-//        for (int i = 0; i < mDKmInt.size(); i++) {
-//            discoverListData.add(new DiscoverListData(mDKmInt.get(i), mName.get(i), mImage.get(i)));
-//        }
-//        Collections.sort(discoverListData, Comparator.comparingInt(DiscoverListData ::getKm));
-//
-//        for (int i = 0; i < )
+        // convert km list from string to integer
+        for(String s : mDKm) {
+            s = s.replaceAll(" km", "");
+            mDKmDou.add(Double.valueOf(s));
+        }
+        // get data into an object list
+        for (int i = 0; i < mDKmDou.size(); i++) {
+            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i)));
+        }
+        // sort data by km
+        Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
+        // remove any attractions busyness that is null or >30%
+        discoverListData.removeIf(n -> (n.getBusy() > 30));
+        discoverListData.removeIf(n -> (n.getBusy() < 0));
+        // clear old km list
+        mDKmDou.clear();
+        // get sorted data and add them into list
+        for (int i = 0; i < discoverListData.size(); i++) {
+            mDName.add(discoverListData.get(i).getName());
+            mDImage.add(discoverListData.get(i).getImage());
+            mDKmDou.add(discoverListData.get(i).getKm());
+            mDBusy.add(discoverListData.get(i).getBusy());
+            mDAddress.add(discoverListData.get(i).getAddress());
+        }
 
+        // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mName, mImage, mDKm, this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -172,29 +193,26 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Attractions>() {
             @Override
             public void onResponse(Call<Attractions> call, Response<Attractions> response) {
-                Log.d("Tag", "Code: " + response.code());
-
+                // check api status
                 if (response.code() == 200) {
                     attractionList = response.body().getVenues();
                     for (int i = 0; i < attractionList.size(); i++) {
+                        // store data into list if the attractions can be forecast
                         if (attractionList.get(i).getForecast()) {
                             forecastableAttractionList.add(attractionList.get(i));
                             mName.add(attractionList.get(i).getVenueName());
+                            mAddress.add(attractionList.get(i).getVenueAddress());
                         }
                     }
-                    Log.d("---------------------------", String.valueOf(mName.size()));
-                    Log.d("---------------------------", String.valueOf(forecastableAttractionList.size()));
 
-                    for(int i = 0; i < attractionList.size(); i++) {
-//                        System.out.println(attractionList.get(i).getVenueName() + attractionList.get(i).getVenueAddress());
-                        addressInputForApi += attractionList.get(i).getVenueLat() + "," + attractionList.get(i).getVenueLon();
-                        if (i != attractionList.size() - 1) {
+                    // make string of latitude and longitude input for the distance api
+                    for(int i = 0; i < forecastableAttractionList.size(); i++) {
+                        addressInputForApi += forecastableAttractionList.get(i).getVenueLat() + "," + forecastableAttractionList.get(i).getVenueLon();
+                        if (i != forecastableAttractionList.size() - 1) {
                             addressInputForApi += "|";
                         }
                     }
-                    Log.d("---------------------------", addressInputForApi);
-
-
+                    // database work
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
@@ -205,7 +223,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-//                    getDistance(userLocation, addressInputForApi);
+                    // get distance between user and attractions
+                    getDistance(userLocation, addressInputForApi);
+                    // get current forecast data for each attraction from api
                     getForecastFromApi();
                 }
             }
@@ -221,8 +241,9 @@ public class MainActivity extends AppCompatActivity {
     private void getForecastFromApi() {
         // call api to get forecast
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+        // restrict number of calls needed to make
         if (number < forecastableAttractionList.size()) {
-            Observable<MultipleResourceActivity> observable = apiInterface.getForecast(apiKey, forecastableAttractionList.get(number).getVenueName(), forecastableAttractionList.get(number).getVenueAddress());
+            Observable<MultipleResourceActivity> observable = apiInterface.getForecastLive(apiKey, forecastableAttractionList.get(number).getVenueName(), forecastableAttractionList.get(number).getVenueAddress());
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<MultipleResourceActivity>() {
@@ -234,42 +255,37 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onNext(@NonNull MultipleResourceActivity data) {
                             try {
-                                Log.d("getVenue_name", String.valueOf(number) + String.valueOf(data.getVenue_info().getVenue_name()));
-                            } catch (Exception e) {
-                                Log.d("----------------", "NO");
-                            }
+                                Log.d("----------------", data.getVenue_info().getVenue_id());
 
-                            try {
+                                // check if api return null
                                 if (data.getAnalysis().getVenue_live_busyness() != null) {
+                                    // add existing data to the list
                                     mBusy.add(data.getAnalysis().getVenue_live_busyness());
                                 } else {
-                                    mBusy.add(0);
+                                    // otherwise add -100 to the list to present null
+                                    mBusy.add(-100);
                                 }
-                                Log.d("getVenue_live_busyness", String.valueOf(number) + String.valueOf(data.getAnalysis().getVenue_live_busyness()));
                             } catch (Exception e) {
                                 Log.d("----------------", "NO");
                             }
 
-
                             if (number < forecastableAttractionList.size() - 1) {
+                                // continue the call
                                 number++;
                                 getForecastFromApi();
                             } else {
+                                // otherwise set up ui
                                 initBrowseAllRecyclerView();
-
-//                            Executors.newSingleThreadExecutor().execute(() -> {
-//                                // insert success word;
-//                                db.wordDao().insert(wordList.toArray(new Word[0]));
-//                            });
-//                            refreshData();
+                                initDiscoverRecyclerView();
                             }
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
                             e.printStackTrace();
-                            Log.d("=======================", "API CALL ERROR");
-                            mBusy.add(0);
+                            // add -100 for error as well
+                            mBusy.add(-100);
+                            // continue the call
                             number++;
                             getForecastFromApi();
                         }
@@ -331,9 +347,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResultDistanceMatrix> call, Response<ResultDistanceMatrix> response) {
                 ResultDistanceMatrix resultDistance = response.body();
+                // check api status
                 if ("OK".equalsIgnoreCase(resultDistance.getStatus())) {
-                    for (int i = 0; i < resultDistance.getRows().size(); i = i + 1) {
-                        mDKm.add(resultDistance.getRows().get(i).getElements().get(0).getDistance().getText());
+                    for (int i = 0; i < resultDistance.getRows().get(0).getElements().size(); i = i + 1) {
+                        // add all distances between user and attractions to the list
+                        mDKm.add(resultDistance.getRows().get(0).getElements().get(i).getDistance().getText());
                     }
                 } else {
                     System.out.println("Code: " + response.code());

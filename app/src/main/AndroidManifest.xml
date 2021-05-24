@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".GenerateTripActivity"></activity>
+        <activity android:name=".AttractionDetailActivity"></activity>
         <activity android:name=".SetLocationActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".OpenScreenActivity">

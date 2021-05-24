@@ -1,6 +1,7 @@
 package com.example.foottraffic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,14 @@ import java.util.ArrayList;
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHolder>{
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
-    private ArrayList<String> mKm = new ArrayList<>();
+    private ArrayList<String> mAddress = new ArrayList<>();
+    private ArrayList<Double> mKm = new ArrayList<>();
     private Context mContext;
 
-    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mKm, Context mContext) {
+    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mAddress, ArrayList<Double> mKm, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
+        this.mAddress = mAddress;
         this.mKm = mKm;
         this.mContext = mContext;
     }
@@ -49,11 +52,15 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
                 .apply(new RequestOptions().override(600, 200))
                 .into(holder.image);
         holder.name.setText(mName.get(position));
-        holder.km.setText(mKm.get(position));
+        holder.km.setText(mKm.get(position) + " km");
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mName.get(position), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, mName.get(position), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, AttractionDetailActivity.class);
+                intent.putExtra("VENUE_NAME", mName.get(position));
+                intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
+                mContext.startActivity(intent);
             }
         });
     }
