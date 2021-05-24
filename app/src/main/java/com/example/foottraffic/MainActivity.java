@@ -23,6 +23,8 @@ import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,15 +59,24 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDImage = new ArrayList<>();
     private ArrayList<String> mDName = new ArrayList<>();
     private ArrayList<String> mDKm = new ArrayList<>();
-    private String apiKey = "pri_1008d36a82b4452393139213da2109c5";
-    private Integer busy;
+    private ArrayList<Integer> mDKmInt = new ArrayList<>();
+    private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
+    private String userLocation;
+    private String addressInputForApi = "";
+    List<DiscoverListData> discoverListData = new ArrayList<DiscoverListData>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = Room.databaseBuilder(getApplicationContext(), AttractionsDatabase.class, "attraction-database").allowMainThreadQueries().build();
+
+        String start = "Washington,DC";
+        String end = "New York City,NY";
+        fetchDistance(start, end);
+
 
         setUserCity();
         getAttractionsFromApi();
@@ -80,20 +91,6 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
 
-        String start = "Washington,DC";
-        String end = "New York City,NY";
-        fetchDistance(start, end);
-
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
-        mDKm.add("1km");
 
 
     }
@@ -103,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
 //        TextView responseText = findViewById(R.id.responseText);
         // set user's city
         String city = getIntent().getStringExtra("USER_CITY");
+        String address = getIntent().getStringExtra("USER_ADDRESS");
         String inputedCity = getIntent().getStringExtra("CITY");
         if (city != null) {
             addressTv.setText(city);
+            userLocation = address;
         } else if (city == null && inputedCity == null) {
             addressTv.setText("Set Location");
             addressTv.setTypeface(addressTv.getTypeface(), Typeface.BOLD_ITALIC);
@@ -118,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
             });
         } else if (city == null && inputedCity != null) {
             addressTv.setText(inputedCity);
+            userLocation = inputedCity;
+
         }
     }
 
@@ -130,6 +131,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDiscoverRecyclerView() {
+//        for(String s : mDKm) {
+//            mDKmInt.add(Integer.valueOf(s));
+//        }
+//        for (int i = 0; i < mDKmInt.size(); i++) {
+//            discoverListData.add(new DiscoverListData(mDKmInt.get(i), mName.get(i), mImage.get(i)));
+//        }
+//        Collections.sort(discoverListData, Comparator.comparingInt(DiscoverListData ::getKm));
+//
+//        for (int i = 0; i < )
+
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
         DiscoverAdapter discoverAdapter = new DiscoverAdapter(mName, mImage, mDKm, this);
         LinearLayoutManager layoutManager
@@ -159,9 +170,15 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("---------------------------", String.valueOf(mName.size()));
                     Log.d("---------------------------", String.valueOf(forecastableAttractionList.size()));
 
-                    for(Attractions.Venue venue : forecastableAttractionList) {
-                        System.out.println(venue.getVenueName() + venue.getVenueAddress());
+                    for(int i = 0; i < attractionList.size(); i++) {
+//                        System.out.println(attractionList.get(i).getVenueName() + attractionList.get(i).getVenueAddress());
+                        addressInputForApi += attractionList.get(i).getVenueLat() + "," + attractionList.get(i).getVenueLon();
+                        if (i != attractionList.size() - 1) {
+                            addressInputForApi += "|";
+                        }
                     }
+                    Log.d("---------------------------", addressInputForApi);
+
 
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
@@ -173,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+//                    getDistance(userLocation, addressInputForApi);
                     getForecastFromApi();
                 }
             }
@@ -207,7 +225,11 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             try {
-                                mBusy.add(data.getAnalysis().getVenue_live_busyness());
+                                if (data.getAnalysis().getVenue_live_busyness() != null) {
+                                    mBusy.add(data.getAnalysis().getVenue_live_busyness());
+                                } else {
+                                    mBusy.add(0);
+                                }
                                 Log.d("getVenue_live_busyness", String.valueOf(number) + String.valueOf(data.getAnalysis().getVenue_live_busyness()));
                             } catch (Exception e) {
                                 Log.d("----------------", "NO");
@@ -246,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchDistance(String start_latLngString, String dest_latLngString) {
-
         // destination: "locationA.lat" + "," + "locationA.lng"
         apiInterface = GoogleMapAPIClientActivity.getClient().create(APIInterfaceActivity.class);
         Call<ResultDistanceMatrix> call = apiInterface.getDistance(start_latLngString, dest_latLngString, GoogleMapAPIClientActivity.GOOGLE_PLACE_API_KEY);
@@ -269,10 +290,35 @@ public class MainActivity extends AppCompatActivity {
                                     for (int y = 0; y < resultDistance.getDestinationAddresses().size(); y = y + 1) {
                                         String destinationAddress = resultDistance.getDestinationAddresses().get(y);
                                         storeModels.add(new StoreModel(originAddress, destinationAddress, totalDistance, totalDuration));
+                                        System.out.println(y + ": " + storeModels.get(y).getOriginAddress() + " + " + storeModels.get(y).getDestinationAddress() + " + " + storeModels.get(y).getDistance() + storeModels.get(y).getDuration() + "\n");
                                     }
                                 }
                             }
                         }
+                    }
+                } else {
+                    System.out.println("Cohde: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultDistanceMatrix> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
+    }
+
+    private void getDistance(String start_latLngString, String dest_latLngString) {
+        apiInterface = GoogleMapAPIClientActivity.getClient().create(APIInterfaceActivity.class);
+        Call<ResultDistanceMatrix> call = apiInterface.getDistance(start_latLngString, dest_latLngString, GoogleMapAPIClientActivity.GOOGLE_PLACE_API_KEY);
+        call.enqueue(new Callback<ResultDistanceMatrix>() {
+            @Override
+            public void onResponse(Call<ResultDistanceMatrix> call, Response<ResultDistanceMatrix> response) {
+                ResultDistanceMatrix resultDistance = response.body();
+                if ("OK".equalsIgnoreCase(resultDistance.getStatus())) {
+                    for (int i = 0; i < resultDistance.getRows().size(); i = i + 1) {
+                        mDKm.add(resultDistance.getRows().get(i).getElements().get(0).getDistance().getText());
                     }
                 } else {
                     System.out.println("Cohde: " + response.code());

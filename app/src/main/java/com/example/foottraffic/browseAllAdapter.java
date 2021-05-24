@@ -49,7 +49,7 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 .apply(new RequestOptions().override(600, 200))
                 .into(holder.image);
         holder.name.setText(mName.get(position));
-        if (mBusy.get(position) != 0) {
+        if (mBusy.get(position) != 0 && mBusy.get(position) != null) {
             holder.busy.setText(mBusy.get(position) + "");
         } else {
             holder.busy.setText("");

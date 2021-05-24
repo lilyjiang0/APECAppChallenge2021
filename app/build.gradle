@@ -85,8 +85,6 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.7'
     implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
 
-
-
     // map api
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
