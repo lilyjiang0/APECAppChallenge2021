@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
+    private ArrayList<String> mAddress = new ArrayList<>();
     private int NUM_COLUMNS = 2;
 
     private ArrayList<String> permissionsToRequest;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDKm = new ArrayList<>();
     private ArrayList<Double> mDKmDou = new ArrayList<>();
     private ArrayList<Integer> mDBusy = new ArrayList<>();
+    private ArrayList<String> mDAddress = new ArrayList<>();
     private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
     private String userLocation;
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBrowseAllRecyclerView() {
         // initialise recyclerview for browse all list
         RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy,this);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, this);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // get data into an object list
         for (int i = 0; i < mDKmDou.size(); i++) {
-            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mBusy.get(i)));
+            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i)));
         }
         // sort data by km
         Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
@@ -154,11 +156,12 @@ public class MainActivity extends AppCompatActivity {
             mDImage.add(discoverListData.get(i).getImage());
             mDKmDou.add(discoverListData.get(i).getKm());
             mDBusy.add(discoverListData.get(i).getBusy());
+            mDAddress.add(discoverListData.get(i).getAddress());
         }
 
         // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mDKmDou, this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -181,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                         if (attractionList.get(i).getForecast()) {
                             forecastableAttractionList.add(attractionList.get(i));
                             mName.add(attractionList.get(i).getVenueName());
+                            mAddress.add(attractionList.get(i).getVenueAddress());
                         }
                     }
 
@@ -222,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
         // restrict number of calls needed to make
         if (number < forecastableAttractionList.size()) {
-            Observable<MultipleResourceActivity> observable = apiInterface.getForecast(apiKey, forecastableAttractionList.get(number).getVenueName(), forecastableAttractionList.get(number).getVenueAddress());
+            Observable<MultipleResourceActivity> observable = apiInterface.getForecastLive(apiKey, forecastableAttractionList.get(number).getVenueName(), forecastableAttractionList.get(number).getVenueAddress());
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<MultipleResourceActivity>() {
@@ -234,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onNext(@NonNull MultipleResourceActivity data) {
                             try {
+                                Log.d("----------------", data.getVenue_info().getVenue_id());
+
                                 // check if api return null
                                 if (data.getAnalysis().getVenue_live_busyness() != null) {
                                     // add existing data to the list

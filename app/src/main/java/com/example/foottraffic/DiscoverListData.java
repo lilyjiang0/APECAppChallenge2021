@@ -4,12 +4,14 @@ public class DiscoverListData{
     private Double km;
     private String name;
     private String image;
+    private String address;
     private Integer busy;
 
-    public DiscoverListData(Double km, String name, String image, Integer busy) {
+    public DiscoverListData(Double km, String name, String image, String address, Integer busy) {
         this.km = km;
         this.name = name;
         this.image = image;
+        this.address = address;
         this.busy = busy;
     }
 
@@ -35,6 +37,14 @@ public class DiscoverListData{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getBusy() {
