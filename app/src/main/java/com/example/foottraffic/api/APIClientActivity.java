@@ -33,8 +33,4 @@ public class APIClientActivity {
         return instance;
     }
 
-    public Observable<MultipleResourceActivity> getForecastData(String api_key_private, String venue_name, String venue_address) {
-        return apiInterface.getForecast(api_key_private, venue_name, venue_address);
-    }
-
 }
