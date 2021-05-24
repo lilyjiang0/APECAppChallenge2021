@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDImage = new ArrayList<>();
     private ArrayList<String> mDName = new ArrayList<>();
     private ArrayList<String> mDKm = new ArrayList<>();
-    private ArrayList<Integer> mDKmInt = new ArrayList<>();
+    private ArrayList<Double> mDKmDou = new ArrayList<>();
+    private ArrayList<Integer> mDBusy = new ArrayList<>();
     private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
     private String userLocation;
@@ -131,18 +132,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDiscoverRecyclerView() {
-//        for(String s : mDKm) {
-//            mDKmInt.add(Integer.valueOf(s));
-//        }
-//        for (int i = 0; i < mDKmInt.size(); i++) {
-//            discoverListData.add(new DiscoverListData(mDKmInt.get(i), mName.get(i), mImage.get(i)));
-//        }
-//        Collections.sort(discoverListData, Comparator.comparingInt(DiscoverListData ::getKm));
+        for(String s : mDKm) {
+            s = s.replaceAll(" km", "");
+            mDKmDou.add(Double.valueOf(s));
+        }
+//        Log.d("**********************", String.valueOf(mDKmDou.size()));
+//        for(int i = 0; i < mDKmDou.size(); i++) {
+//            Log.d("**********************", String.valueOf(mDKmDou.get(i)));
 //
-//        for (int i = 0; i < )
+//        }
+        for (int i = 0; i < mDKmDou.size(); i++) {
+            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mBusy.get(i)));
+        }
+        Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
+        discoverListData.removeIf(n -> (n.getBusy() > 30));
+        discoverListData.removeIf(n -> (n.getBusy() < 0));
+        mDKmDou.clear();
+        for (int i = 0; i < discoverListData.size(); i++) {
+            mDName.add(discoverListData.get(i).getName());
+            mDImage.add(discoverListData.get(i).getImage());
+            mDKmDou.add(discoverListData.get(i).getKm());
+            mDBusy.add(discoverListData.get(i).getBusy());
+        }
 
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mName, mImage, mDKm, this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mDKmDou, this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -170,10 +184,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("---------------------------", String.valueOf(mName.size()));
                     Log.d("---------------------------", String.valueOf(forecastableAttractionList.size()));
 
-                    for(int i = 0; i < attractionList.size(); i++) {
+                    for(int i = 0; i < forecastableAttractionList.size(); i++) {
 //                        System.out.println(attractionList.get(i).getVenueName() + attractionList.get(i).getVenueAddress());
-                        addressInputForApi += attractionList.get(i).getVenueLat() + "," + attractionList.get(i).getVenueLon();
-                        if (i != attractionList.size() - 1) {
+                        addressInputForApi += forecastableAttractionList.get(i).getVenueLat() + "," + forecastableAttractionList.get(i).getVenueLon();
+                        if (i != forecastableAttractionList.size() - 1) {
                             addressInputForApi += "|";
                         }
                     }
@@ -190,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-//                    getDistance(userLocation, addressInputForApi);
+                    getDistance(userLocation, addressInputForApi);
                     getForecastFromApi();
                 }
             }
@@ -228,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (data.getAnalysis().getVenue_live_busyness() != null) {
                                     mBusy.add(data.getAnalysis().getVenue_live_busyness());
                                 } else {
-                                    mBusy.add(0);
+                                    mBusy.add(-100);
                                 }
                                 Log.d("getVenue_live_busyness", String.valueOf(number) + String.valueOf(data.getAnalysis().getVenue_live_busyness()));
                             } catch (Exception e) {
@@ -241,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                                 getForecastFromApi();
                             } else {
                                 initBrowseAllRecyclerView();
+                                initDiscoverRecyclerView();
 
 //                            Executors.newSingleThreadExecutor().execute(() -> {
 //                                // insert success word;
@@ -317,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ResultDistanceMatrix> call, Response<ResultDistanceMatrix> response) {
                 ResultDistanceMatrix resultDistance = response.body();
                 if ("OK".equalsIgnoreCase(resultDistance.getStatus())) {
-                    for (int i = 0; i < resultDistance.getRows().size(); i = i + 1) {
-                        mDKm.add(resultDistance.getRows().get(i).getElements().get(0).getDistance().getText());
+                    for (int i = 0; i < resultDistance.getRows().get(0).getElements().size(); i = i + 1) {
+                            mDKm.add(resultDistance.getRows().get(0).getElements().get(i).getDistance().getText());
                     }
                 } else {
                     System.out.println("Cohde: " + response.code());
