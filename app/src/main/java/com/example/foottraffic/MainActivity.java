@@ -1,13 +1,8 @@
 package com.example.foottraffic;
 
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,8 +23,6 @@ import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +32,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
@@ -60,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
     private final static int ALL_PERMISSIONS_RESULT = 101;
-    List<StoreModel> storeModels;
+    List<StoreModel> storeModels = new ArrayList<>();
 
     private ArrayList<String> mDImage = new ArrayList<>();
     private ArrayList<String> mDName = new ArrayList<>();
@@ -91,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         String start = "Washington,DC";
         String end = "New York City,NY";
         fetchDistance(start, end);
-//        System.out.println("name is: " + storeModels + " total distance is: ");
 
         mDKm.add("1km");
         mDKm.add("1km");
@@ -265,22 +255,27 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ResultDistanceMatrix> call, Response<ResultDistanceMatrix> response) {
                 ResultDistanceMatrix resultDistance = response.body();
                 if ("OK".equalsIgnoreCase(resultDistance.getStatus())) {
-//                    ResultDistanceMatrix.InfoDistanceMatrix infoDistanceMatrix = resultDistance.rows.get(0);
-//                    ResultDistanceMatrix.InfoDistanceMatrix.DistanceElement distanceElement = infoDistanceMatrix.elements.get(0);
-                    ResultDistanceMatrix.Row infoDistanceMatrix = resultDistance.getRows().get(0);
-                    ResultDistanceMatrix.Element distanceElement = infoDistanceMatrix.getElements().get(0);
-
-                    if ("OK".equalsIgnoreCase(distanceElement.getStatus())) {
-                        ResultDistanceMatrix.Duration itemDuration = distanceElement.getDuration();
-                        ResultDistanceMatrix.Distance itemDistance = distanceElement.getDistance();
-                        String totalDistance = itemDistance.getText();
-                        String totalDuration = itemDuration.getText();
-                        String name = resultDistance.getOriginAddresses().get(0);
-//                        storeModels.add(new StoreModel(name, "vicinity", totalDistance, totalDuration));
-//
+                    for (int i = 0; i < resultDistance.getRows().size(); i = i + 1) {
+                        ResultDistanceMatrix.Row infoDistanceMatrix = resultDistance.getRows().get(i);
+                        for (int j = 0; j < resultDistance.getRows().size(); j = j + 1) {
+                            ResultDistanceMatrix.Element distanceElement = infoDistanceMatrix.getElements().get(j);
+                            if ("OK".equalsIgnoreCase(distanceElement.getStatus())) {
+                                ResultDistanceMatrix.Duration itemDuration = distanceElement.getDuration();
+                                ResultDistanceMatrix.Distance itemDistance = distanceElement.getDistance();
+                                String totalDistance = itemDistance.getText();
+                                String totalDuration = itemDuration.getText();
+                                for (int x = 0; x < resultDistance.getOriginAddresses().size(); x = x + 1) {
+                                    String originAddress = resultDistance.getOriginAddresses().get(x);
+                                    for (int y = 0; y < resultDistance.getDestinationAddresses().size(); y = y + 1) {
+                                        String destinationAddress = resultDistance.getDestinationAddresses().get(y);
+                                        storeModels.add(new StoreModel(originAddress, destinationAddress, totalDistance, totalDuration));
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
-                    System.out.println("Code: " + response.code());
+                    System.out.println("Cohde: " + response.code());
                 }
             }
 
