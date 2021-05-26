@@ -102,7 +102,4 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:25.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-
-
-
 }

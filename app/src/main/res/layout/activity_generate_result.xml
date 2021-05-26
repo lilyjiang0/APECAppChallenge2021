@@ -13,6 +13,7 @@
         android:layout_height="46dp"
         android:layout_marginTop="68dp"
         android:text="Your Trip Plan :"
+        android:fontFamily="@font/roboto_bolditalic"
         android:textColor="#08433E"
         android:textSize="24sp"
         android:textStyle="bold"
