@@ -25,14 +25,16 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
     private ArrayList<String> mAddress = new ArrayList<>();
     private ArrayList<Double> mKm = new ArrayList<>();
     private ArrayList<String> mID = new ArrayList<>();
+    private ArrayList<Integer> mBusy = new ArrayList<>();
     private Context mContext;
 
-    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mAddress, ArrayList<Double> mKm, ArrayList<String> mID, Context mContext) {
+    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mAddress, ArrayList<Double> mKm, ArrayList<String> mID, ArrayList<Integer> mBusy, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mAddress = mAddress;
         this.mKm = mKm;
         this.mID = mID;
+        this.mBusy = mBusy;
         this.mContext = mContext;
     }
 

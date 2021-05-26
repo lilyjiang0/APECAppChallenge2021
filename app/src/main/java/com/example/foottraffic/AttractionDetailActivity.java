@@ -38,8 +38,15 @@ public class AttractionDetailActivity extends AppCompatActivity {
     private String address;
     private String venueID;
     private String image;
+    private Integer busyness;
     private String privateApiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private String publicApiKey = "pub_e6af9cfdcffc4b5da127d98fec9a9b89";
+    ArrayList<Integer> colors = new ArrayList<Integer>();
+    List<Integer> busyHrsList = new ArrayList<>();
+    List<Integer> quietHrsList = new ArrayList<>();
+    private int count = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +57,29 @@ public class AttractionDetailActivity extends AppCompatActivity {
         address = getIntent().getStringExtra("VENUE_ADDRESS");
         venueID = getIntent().getStringExtra("VENUE_ID");
         image = getIntent().getStringExtra("VENUE_IMAGE");
+        busyness = getIntent().getIntExtra("VENUE_BUSY", 0);
+
 
         TextView nameTv = findViewById(R.id.nameTv);
+        TextView busyTv = findViewById(R.id.busyTv);
         ImageView imageIv = findViewById(R.id.attractionIv);
         nameTv.setText(name);
+        if (busyness != -100) {
+            if (busyness < 40) {
+                busyTv.setText("Not Busy");
+            } else if (busyness < 70) {
+                busyTv.setText("A little Busy");
+            } else {
+                busyTv.setText("Busy");
+            }
+        } else {
+            busyTv.setText("");
+        }
         Glide.with(this).load(image).into(imageIv);
 
 
         getHourDataFromApi();
-        if (venueID != "null") {
+        if (venueID != null) {
             getWeekDataFromApi();
         }
     }
@@ -73,10 +94,6 @@ public class AttractionDetailActivity extends AppCompatActivity {
                 Log.d("---------", String.valueOf(response.code()));
                 // check api status
                 if (response.code() == 200) {
-                    List<Integer> myList = new ArrayList<>();
-                    myList = response.body().getAnalysis().get(0).getDayRaw();
-                    System.out.println(Arrays.toString(myList.toArray()));
-
                     BarChart hourBc = findViewById(R.id.hourBc);
                     ArrayList<BarEntry> busy = new ArrayList<>();
                     for (int i = 0; i < response.body().getAnalysis().get(0).getDayRaw().size(); i++) {
@@ -89,8 +106,33 @@ public class AttractionDetailActivity extends AppCompatActivity {
                         }
                     }
 
+                    int start = (int) busy.get(0).getX();
+                    int end = (int) busy.get(busy.size() - 1).getX();
+                    if (end < start) {
+                        end += 25;
+                    }
+
+                    busyHrsList = response.body().getAnalysis().get(0).getBusyHours();
+                    quietHrsList = response.body().getAnalysis().get(0).getQuietHours();
+
+                    for (int i = start; i < end + 1; i++) {
+                        int size = quietHrsList.size() + busyHrsList.size();
+                        for (int k = 0; k < size; k++) {
+                            if (k < busyHrsList.size() && busyHrsList != null && !busyHrsList.isEmpty() && busyHrsList.get(k) == i) {
+                                colors.add(Color.rgb(245, 12,10));
+                            } else if (k < quietHrsList.size() && quietHrsList != null && !quietHrsList.isEmpty() && quietHrsList.get(k) == i) {
+                                colors.add(Color.rgb(56,199,112));
+                            }
+                        }
+                        count++;
+                        if (colors.size() != count) {
+                            colors.add(Color.rgb(52, 232, 235));
+                        }
+                    }
+
+
                     BarDataSet barDataSet = new BarDataSet(busy, "Busyness%");
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    barDataSet.setColors(colors);
                     barDataSet.setValueTextColor(Color.BLACK);
                     barDataSet.setValueTextSize(10f);
                     barDataSet.setDrawValues(false);
@@ -122,7 +164,6 @@ public class AttractionDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<WeekForecastData>() {
             @Override
             public void onResponse(Call<WeekForecastData> call, Response<WeekForecastData> response) {
-                Log.d("*********", String.valueOf(response.code()));
                 // check api status
                 if (response.code() == 200) {
                     List<WeekForecastData.WeekOverview> myList = new ArrayList<>();

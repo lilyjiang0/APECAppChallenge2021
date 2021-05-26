@@ -78,6 +78,7 @@ public class GenerateTripActivity extends AppCompatActivity {
                     getHourDataFromApi(place1.getText().toString(), item.get(place1.getText().toString()));
                     System.out.println("yes1");
                     System.out.println(place1.getText().toString());
+
                 }
             }
         });
@@ -94,35 +95,34 @@ public class GenerateTripActivity extends AppCompatActivity {
     }
 
     private void getHourDataFromApi(String name, String address) {
-    // call api to get hour data
-    apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
-    Call<ForecastData> call = apiInterface.getForecast(apiKey, name, address);
-    call.enqueue(new Callback<ForecastData>() {
-        @Override
-        public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
-            // check api status
-            Log.d("HEY", String.valueOf(response.body()));
-            ForecastData result = response.body();
-            Log.d("HEY2", String.valueOf(response.body()));
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(result.getVenueInfo().getVenueTimezone()));
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            Log.d("HEY3", String.valueOf(response.body()));
-            if (result.getAnalysis().get(dayOfWeek).getQuietHours() == null) {
-                System.out.println("This venue is closed.");
-                Log.d("The Code is: " , String.valueOf(response.code()));
+        // call api to get hour data
+        apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+        Call<ForecastData> call = apiInterface.getForecast(apiKey, name, address);
+        call.enqueue(new Callback<ForecastData>() {
+            @Override
+            public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
+                // check api status
+                Log.d("HEY", String.valueOf(response.body()));
+                ForecastData result = response.body();
+                Log.d("HEY2", String.valueOf(response.body()));
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(result.getVenueInfo().getVenueTimezone()));
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                Log.d("HEY3", String.valueOf(response.body()));
+                if (result.getAnalysis().get(dayOfWeek).getQuietHours() == null) {
+                    System.out.println("This venue is closed.");
+                    Log.d("The Code is: " , String.valueOf(response.code()));
+                }
+                if (response.code() == 200) {
+                    myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
+                    System.out.println(Arrays.toString(myDataList.toArray()));
+                }
             }
-            if (response.code() == 200) {
-                myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
-                System.out.println(Arrays.toString(myDataList.toArray()));
+            @Override
+            public void onFailure(Call<ForecastData> call, Throwable t) {
+                call.cancel();
+                Log.d("ERROR", "Api call failed. Message is: " + t.getMessage() + " Cause is: " + t.getCause());
+    //            System.out.println(call.);
             }
-        }
-        @Override
-        public void onFailure(Call<ForecastData> call, Throwable t) {
-            call.cancel();
-            Log.d("ERROR", "Api call failed. Message is: " + t.getMessage() + " Cause is: " + t.getCause());
-//            System.out.println(call.);
-
-        }
-        });
+            });
     }
 }

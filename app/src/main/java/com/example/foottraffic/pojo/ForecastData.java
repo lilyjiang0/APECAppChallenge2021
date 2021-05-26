@@ -75,6 +75,7 @@ public class ForecastData {
         @Expose
         private List<Integer> dayRaw = null;
 
+
         public List<Integer> getDayRaw() {
             return dayRaw;
         }

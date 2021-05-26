@@ -108,11 +108,13 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1558949315-d484360311fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=967&q=80");
         mImage.add("https://images.unsplash.com/photo-1556435880-9f3fe3aae5bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1615717591219-51be24923084?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80");
+        mImage.add("https://images.unsplash.com/photo-1555753360-7c9b66468016?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80");
         mImage.add("https://images.unsplash.com/photo-1513157060608-f5117117a051?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80");
         mImage.add("https://images.unsplash.com/photo-1563536702-02895c461678?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1489&q=80");
         mImage.add("https://images.unsplash.com/photo-1580420832496-de48689556ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80");
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
+
     }
 
     private void setUserCity() {
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
         // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID,this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID, mDBusy,this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -298,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                             // add -100 for error as well
                             mBusy.add(-100);
-                            mID.add("null");
+                            mID.add(null);
                             // continue the call
                             number++;
                             getForecastFromApi();

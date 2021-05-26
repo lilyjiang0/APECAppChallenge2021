@@ -68,6 +68,7 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
                 intent.putExtra("VENUE_ID", mID.get(position));
                 intent.putExtra("VENUE_IMAGE", mImage.get(position));
+                intent.putExtra("VENUE_BUSY", mBusy.get(position));
                 mContext.startActivity(intent);
             }
         });
