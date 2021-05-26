@@ -85,3 +85,5 @@ lint/tmp/
 # lint/reports/
 
 .project
+
+.DS_Store

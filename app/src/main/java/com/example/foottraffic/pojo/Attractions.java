@@ -2,8 +2,10 @@ package com.example.foottraffic.pojo;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -317,8 +319,8 @@ public class Attractions {
 
     }
 
-    @Entity
-    public class Venue {
+    @Entity(tableName = "venue")
+    public static class Venue implements Serializable {
         @SerializedName("forecast")
         @Expose
         private Boolean forecast;
@@ -388,6 +390,11 @@ public class Attractions {
             this.venueName = venueName;
         }
 
+        @Override
+        public String toString() {
+            return "venueName=" + venueName +
+                    ", venueAddress=" + venueAddress ;
+        }
     }
 
 }

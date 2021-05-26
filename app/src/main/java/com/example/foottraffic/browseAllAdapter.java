@@ -25,13 +25,15 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
     private ArrayList<String> mAddress = new ArrayList<>();
+    private ArrayList<String> mID = new ArrayList<>();
     private Context mContext;
 
-    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, ArrayList<String> mAddress, Context mContext) {
+    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, ArrayList<String> mAddress, ArrayList<String> mID, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mBusy = mBusy;
         this.mAddress = mAddress;
+        this.mID = mID;
         this.mContext = mContext;
     }
 
@@ -64,6 +66,8 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 Intent intent = new Intent(mContext, AttractionDetailActivity.class);
                 intent.putExtra("VENUE_NAME", mName.get(position));
                 intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
+                intent.putExtra("VENUE_ID", mID.get(position));
+                intent.putExtra("VENUE_IMAGE", mImage.get(position));
                 mContext.startActivity(intent);
             }
         });

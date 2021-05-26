@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
+import com.example.foottraffic.pojo.WeekForecastData;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -32,9 +36,10 @@ public class AttractionDetailActivity extends AppCompatActivity {
     private APIInterfaceActivity apiInterface;
     private String name;
     private String address;
-    private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
-
-
+    private String venueID;
+    private String image;
+    private String privateApiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
+    private String publicApiKey = "pub_e6af9cfdcffc4b5da127d98fec9a9b89";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,35 +48,25 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
         name = getIntent().getStringExtra("VENUE_NAME");
         address = getIntent().getStringExtra("VENUE_ADDRESS");
+        venueID = getIntent().getStringExtra("VENUE_ID");
+        image = getIntent().getStringExtra("VENUE_IMAGE");
+
         TextView nameTv = findViewById(R.id.nameTv);
+        ImageView imageIv = findViewById(R.id.attractionIv);
         nameTv.setText(name);
+        Glide.with(this).load(image).into(imageIv);
+
+
         getHourDataFromApi();
-//
-//        BarChart hourBc = findViewById(R.id.hourBc);
-//        ArrayList<BarEntry> visitors = new ArrayList<>();
-//        visitors.add(new BarEntry(1, 60));
-//        visitors.add(new BarEntry(2, 40));
-//        visitors.add(new BarEntry(3, 50));
-//        visitors.add(new BarEntry(4, 60));
-//        visitors.add(new BarEntry(5, 90));
-//        visitors.add(new BarEntry(6, 20));
-//        visitors.add(new BarEntry(7, 30));
-//
-//        BarDataSet barDataSet = new BarDataSet(visitors, "Vistors");
-//        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-//        barDataSet.setValueTextColor(Color.BLACK);
-//        barDataSet.setValueTextSize(16f);
-//        BarData barData = new BarData(barDataSet);
-//        hourBc.setFitBars(true);
-//        hourBc.setData(barData);
-//        hourBc.getDescription().setText("TEST");
-//        hourBc.animateY(2000);
+        if (venueID != "null") {
+            getWeekDataFromApi();
+        }
     }
 
     private void getHourDataFromApi() {
         // call api to get hour data
         apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
-        Call<ForecastData> call = apiInterface.getForecast(apiKey, name, address);
+        Call<ForecastData> call = apiInterface.getForecast(privateApiKey, name, address);
         call.enqueue(new Callback<ForecastData>() {
             @Override
             public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
@@ -82,11 +77,82 @@ public class AttractionDetailActivity extends AppCompatActivity {
                     myList = response.body().getAnalysis().get(0).getDayRaw();
                     System.out.println(Arrays.toString(myList.toArray()));
 
+                    BarChart hourBc = findViewById(R.id.hourBc);
+                    ArrayList<BarEntry> busy = new ArrayList<>();
+                    for (int i = 0; i < response.body().getAnalysis().get(0).getDayRaw().size(); i++) {
+                        if (response.body().getAnalysis().get(0).getDayRaw().get(i) != 0) {
+                            if (i + 6 <= 24) {
+                                busy.add(new BarEntry( i + 6, response.body().getAnalysis().get(0).getDayRaw().get(i)));
+                            } else {
+                                busy.add(new BarEntry( i - 19, response.body().getAnalysis().get(0).getDayRaw().get(i)));
+                            }
+                        }
+                    }
+
+                    BarDataSet barDataSet = new BarDataSet(busy, "Busyness%");
+                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    barDataSet.setValueTextColor(Color.BLACK);
+                    barDataSet.setValueTextSize(10f);
+                    barDataSet.setDrawValues(false);
+                    BarData barData = new BarData(barDataSet);
+                    hourBc.setFitBars(true);
+                    hourBc.setData(barData);
+                    hourBc.getDescription().setEnabled(false);
+                    hourBc.getAxisRight().setDrawGridLines(false);
+                    hourBc.getAxisLeft().setDrawGridLines(false);
+                    hourBc.getXAxis().setDrawGridLines(false);
+                    YAxis rightYAxis = hourBc.getAxisRight();
+                    rightYAxis.setEnabled(false);
+                    hourBc.animateY(2000);
                 }
             }
 
             @Override
             public void onFailure(Call<ForecastData> call, Throwable t) {
+                call.cancel();
+                Log.d("ERROR", "Api call failed");
+            }
+        });
+    }
+
+    private void getWeekDataFromApi() {
+        // call api to get hour data
+        apiInterface = APIClientActivity.getClient().create(APIInterfaceActivity.class);
+        Call<WeekForecastData> call = apiInterface.getWeekForecast(publicApiKey, venueID);
+        call.enqueue(new Callback<WeekForecastData>() {
+            @Override
+            public void onResponse(Call<WeekForecastData> call, Response<WeekForecastData> response) {
+                Log.d("*********", String.valueOf(response.code()));
+                // check api status
+                if (response.code() == 200) {
+                    List<WeekForecastData.WeekOverview> myList = new ArrayList<>();
+
+                    BarChart weekBc = findViewById(R.id.weekBc);
+                    ArrayList<BarEntry> busy = new ArrayList<>();
+                    for (int i = 0; i < response.body().getAnalysis().getWeekOverview().size(); i++) {
+                        busy.add(new BarEntry( i + 1, response.body().getAnalysis().getWeekOverview().get(i).getDayMean()));
+                    }
+//
+                    BarDataSet barDataSet = new BarDataSet(busy, "Busyness%");
+                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    barDataSet.setValueTextColor(Color.BLACK);
+                    barDataSet.setValueTextSize(10f);
+                    barDataSet.setDrawValues(false);
+                    BarData barData = new BarData(barDataSet);
+                    weekBc.setFitBars(true);
+                    weekBc.setData(barData);
+                    weekBc.getAxisRight().setDrawGridLines(false);
+                    weekBc.getAxisLeft().setDrawGridLines(false);
+                    weekBc.getXAxis().setDrawGridLines(false);
+                    weekBc.getDescription().setEnabled(false);
+                    YAxis rightYAxis = weekBc.getAxisRight();
+                    rightYAxis.setEnabled(false);
+                    weekBc.animateY(2000);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeekForecastData> call, Throwable t) {
                 call.cancel();
                 Log.d("ERROR", "Api call failed");
             }

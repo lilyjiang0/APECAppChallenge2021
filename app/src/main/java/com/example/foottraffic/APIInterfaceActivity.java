@@ -5,6 +5,7 @@ import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
 import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
+import com.example.foottraffic.pojo.WeekForecastData;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
@@ -25,6 +26,14 @@ public interface APIInterfaceActivity {
 
 //    @GET("forecasts/quiet")
 //    Call<AttractionQuietHours> getQuietHours(@Query("api_key_public") String api_key_public, @Query("venue_id") String venue_id, @Query("day_step") Integer day_step);
+
+    @GET("forecasts/weekoverview")
+    Call<WeekForecastData> getWeekForecast(@Query("api_key_public") String api_key_public, @Query("venue_id") String venue_id);
+
+
+    @GET("forecasts/quiet")
+    Call<AttractionQuietHours> getQuietHours(@Query("api_key_public") String api_key_public, @Query("venue_id") String venue_id);
+
 
     // google map
     @GET("distancematrix/json") // origins/destinations:  LatLng as string
