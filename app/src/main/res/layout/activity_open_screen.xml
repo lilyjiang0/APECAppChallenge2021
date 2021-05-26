@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     android:background="@mipmap/open_screen">
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:layout_width="166dp"
-        android:layout_height="36dp"
-        android:background="@mipmap/logo"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="283dp"
+        android:layout_height="266dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.419"
+        app:srcCompat="@drawable/app_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
