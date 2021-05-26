@@ -21,8 +21,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,16 +95,18 @@ public class AttractionDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
                 Log.d("---------", String.valueOf(response.code()));
+                int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+                Log.d("_-----------------", String.valueOf(dayOfWeek));
                 // check api status
                 if (response.code() == 200) {
                     BarChart hourBc = findViewById(R.id.hourBc);
                     ArrayList<BarEntry> busy = new ArrayList<>();
-                    for (int i = 0; i < response.body().getAnalysis().get(0).getDayRaw().size(); i++) {
-                        if (response.body().getAnalysis().get(0).getDayRaw().get(i) != 0) {
+                    for (int i = 0; i < response.body().getAnalysis().get(dayOfWeek).getDayRaw().size(); i++) {
+                        if (response.body().getAnalysis().get(dayOfWeek).getDayRaw().get(i) != 0) {
                             if (i + 6 <= 24) {
-                                busy.add(new BarEntry( i + 6, response.body().getAnalysis().get(0).getDayRaw().get(i)));
+                                busy.add(new BarEntry( i + 6, response.body().getAnalysis().get(dayOfWeek).getDayRaw().get(i)));
                             } else {
-                                busy.add(new BarEntry( i - 19, response.body().getAnalysis().get(0).getDayRaw().get(i)));
+                                busy.add(new BarEntry( i - 19, response.body().getAnalysis().get(dayOfWeek).getDayRaw().get(i)));
                             }
                         }
                     }
@@ -112,8 +117,8 @@ public class AttractionDetailActivity extends AppCompatActivity {
                         end += 25;
                     }
 
-                    busyHrsList = response.body().getAnalysis().get(0).getBusyHours();
-                    quietHrsList = response.body().getAnalysis().get(0).getQuietHours();
+                    busyHrsList = response.body().getAnalysis().get(dayOfWeek).getBusyHours();
+                    quietHrsList = response.body().getAnalysis().get(dayOfWeek).getQuietHours();
 
                     for (int i = start; i < end + 1; i++) {
                         int size = quietHrsList.size() + busyHrsList.size();
