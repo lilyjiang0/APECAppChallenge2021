@@ -82,20 +82,20 @@ public class OpenScreenActivity extends AppCompatActivity {
         }
     }
 
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults){
-        switch (requestCode){
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
             case 1: {
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(OpenScreenActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                         // get user location and go to main page if permission is granted
                         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                if(location != null) {
+                                if (location != null) {
                                     Double latitude = location.getLatitude();
                                     Double longitude = location.getLongitude();
                                     try {
@@ -121,7 +121,7 @@ public class OpenScreenActivity extends AppCompatActivity {
                             }
                         });
                     }
-                }else{
+                } else {
                     // directly enter main page if permission denied
                     Toast.makeText(this, "Permission denied, you can either enable location permission in setting OR set your location manually", Toast.LENGTH_LONG).show();
                     Timer timer = new Timer();
