@@ -21,10 +21,12 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,26 +42,25 @@ public class GenerateTripActivity extends AppCompatActivity {
     private AutoCompleteTextView place4;
     private AutoCompleteTextView place5;
 
-    private List<Attractions.Venue> venueList;
-//    ArrayAdapter<List<Map<String, String>>> adapter;
+    private ArrayList<String> venueNames = new ArrayList<>(MainActivity.mName);
+    private ArrayList<String> venueAddresses = new ArrayList<>(MainActivity.mAddress);
     ArrayAdapter<String> adapter;
-    ArrayList<String> strings = new ArrayList<>();
+
+    List<Integer> myDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        venueList = (List<Attractions.Venue>) getIntent().getSerializableExtra("venue_list");
+        ArrayList<String> n = new ArrayList<>(MainActivity.mName);
+//        venueList = (List<Attractions.Venue>) getIntent().getSerializableExtra("venue_list");
         setContentView(R.layout.activity_generate_trip);
-//        List<Map<String, String>> map = new ArrayList<Map<String, String>>();
         Map<String, String> item = new HashMap<String, String>();
-        for (int i = 0; i < venueList.size(); i++) {
-            item.put(venueList.get(i).getVenueAddress(), venueList.get(i).getVenueName());
-//            map.add(item);
-            strings.add(venueList.get(i).getVenueAddress());
+        for (int i = 0; i < venueNames.size(); i++) {
+            item.put(venueNames.get(i), venueAddresses.get(i));
         }
         // Initialise adapter
 //        adapter = new ArrayAdapter<List<Map<String, String>>>(this, android.R.layout.simple_dropdown_item_1line, strings);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, strings);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, venueNames);
 
         // destination addresses
         // place 1
@@ -70,15 +71,26 @@ public class GenerateTripActivity extends AppCompatActivity {
         place2 = findViewById(R.id.place2AutoCompleteTv);
         place2.setThreshold(1);
         place2.setAdapter(adapter);
-        if (item.containsKey(place1.getText())) {
-//            getHourDataFromApi(item.get(place1.getText().toString()), place1.getText().toString());
-            System.out.println("yes1");
-            System.out.println(place1.getText().toString());
-        }
-//        if(!place2.toString().isEmpty()) {
-////            getHourDataFromApi(item.get(place2.getText().toString()), place2.getText().toString());
-//            System.out.println("yes2");
-//        }
+        place1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (item.containsKey(place1.getText().toString())) {
+                    getHourDataFromApi(place1.getText().toString(), item.get(place1.getText().toString()));
+                    System.out.println("yes1");
+                    System.out.println(place1.getText().toString());
+                }
+            }
+        });
+        place2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (item.containsKey(place2.getText().toString())) {
+//                    getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
+                    System.out.println("yes2");
+                    System.out.println(place2.getText().toString());
+                }
+            }
+        });
     }
 
     private void getHourDataFromApi(String name, String address) {
@@ -88,22 +100,28 @@ public class GenerateTripActivity extends AppCompatActivity {
     call.enqueue(new Callback<ForecastData>() {
         @Override
         public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
-            try {
-                Log.d("---------", response.errorBody().string());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             // check api status
+            Log.d("HEY", String.valueOf(response.body()));
+            ForecastData result = response.body();
+            Log.d("HEY2", String.valueOf(response.body()));
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(result.getVenueInfo().getVenueTimezone()));
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            Log.d("HEY3", String.valueOf(response.body()));
+            if (result.getAnalysis().get(dayOfWeek).getQuietHours() == null) {
+                System.out.println("This venue is closed.");
+                Log.d("The Code is: " , String.valueOf(response.code()));
+            }
             if (response.code() == 200) {
-                List<Integer> myList = new ArrayList<>();
-                myList = response.body().getAnalysis().get(0).getDayRaw();
-                System.out.println(Arrays.toString(myList.toArray()));
+                myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
+                System.out.println(Arrays.toString(myDataList.toArray()));
             }
         }
         @Override
         public void onFailure(Call<ForecastData> call, Throwable t) {
             call.cancel();
-            Log.d("ERROR", "Api call failed");
+            Log.d("ERROR", "Api call failed. Message is: " + t.getMessage() + " Cause is: " + t.getCause());
+//            System.out.println(call.);
+
         }
         });
     }

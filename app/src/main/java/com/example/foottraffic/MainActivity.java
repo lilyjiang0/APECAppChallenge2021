@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
     List<Attractions.Venue> attractionList = new ArrayList<>();
     List<Attractions.Venue> forecastableAttractionList = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
-    private ArrayList<String> mName = new ArrayList<>();
+    public static ArrayList<String> mName = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
-    private ArrayList<String> mAddress = new ArrayList<>();
+    public static ArrayList<String> mAddress = new ArrayList<>();
     private ArrayList<String> mID = new ArrayList<>();
     private int NUM_COLUMNS = 2;
 
@@ -90,17 +90,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // button 1 was clicked!
                 Intent intent = new Intent(MainActivity.this, GenerateTripActivity.class);
-                ArrayList<String> venueNames = new ArrayList<String>();
-                ArrayList<String> venueAddresses = new ArrayList<String>();
-                List<Attractions.Venue> venueList = db.attractionsDao().getAllVenues();
-                for (int i = 0; i < venueList.size(); i++) {
-                    venueNames.add(venueList.get(i).getVenueName());
-                    venueAddresses.add(venueList.get(i).getVenueAddress());
-                }
-                intent.putStringArrayListExtra("venue_name", venueNames);
-                intent.putStringArrayListExtra("venue_address", venueAddresses);
-
-                intent.putExtra("venue_list", (Serializable) db.attractionsDao().getAllVenues());
+//                intent.putExtra("venue_list", (Serializable) db.attractionsDao().getAllVenues());
                 startActivity(intent);
             }
         });
