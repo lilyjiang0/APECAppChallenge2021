@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/discoverIv"
         android:layout_width="280dp"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:contentDescription="place cover"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
