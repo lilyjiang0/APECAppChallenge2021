@@ -1,14 +1,18 @@
 package com.example.foottraffic;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,15 +21,20 @@ import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -47,6 +56,9 @@ public class GenerateTripActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
 
     List<Integer> myDataList = new ArrayList<>();
+    List<Map<String, String>> details = new ArrayList<Map<String, String>>();
+
+    private Button btnGenerate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +88,11 @@ public class GenerateTripActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (item.containsKey(place1.getText().toString())) {
                     getHourDataFromApi(place1.getText().toString(), item.get(place1.getText().toString()));
-                    System.out.println("yes1");
                     System.out.println(place1.getText().toString());
-
+                    Map<String, String> element = new HashMap<String, String>();
+                    element.put("venue_name", place1.getText().toString());
+                    element.put("quiet_hours", Arrays.toString(myDataList.toArray()));
+                    details.add(element);
                 }
             }
         });
@@ -86,12 +100,27 @@ public class GenerateTripActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (item.containsKey(place2.getText().toString())) {
-//                    getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
-                    System.out.println("yes2");
+                    getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
                     System.out.println(place2.getText().toString());
+                    Map<String, String> element = new HashMap<String, String>();
+                    element.put("venue_name", place2.getText().toString());
+                    element.put("quiet_hours", Arrays.toString(myDataList.toArray()));
+                    details.add(element);
                 }
             }
         });
+
+
+        btnGenerate = findViewById(R.id.btnGenerate);
+        btnGenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GenerateTripActivity.this, GenerateBtnActivity.class);
+                intent.putExtra("list", (Serializable) details);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void getHourDataFromApi(String name, String address) {
