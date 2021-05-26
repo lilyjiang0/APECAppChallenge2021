@@ -4,8 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/roadtrip_background"
-    >
+    android:background="@mipmap/open_screen">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="237dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/white"
+        android:text="GENERATE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+
+    <ImageButton
+        android:id="@+id/favorite"
+        android:layout_width="54dp"
+        android:layout_height="60dp"
+        android:background="#00ffffff"
+        android:onClick="onToggleStar"
+        android:src="@drawable/star"
+        tools:layout_editor_absoluteX="341dp"
+        tools:layout_editor_absoluteY="8dp" />
 
     <TextView
         android:id="@+id/textView5"
@@ -14,7 +34,7 @@
         android:layout_marginTop="68dp"
         android:text="Your Trip Plan :"
         android:fontFamily="@font/roboto_bolditalic"
-        android:textColor="#08433E"
+        android:textColor="#126054"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +97,17 @@
         android:text="Trading hour: 9am - 5pm
 Forcasted traffic foot: 20 % less than normal "
         tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="201dp" />/
+        tools:layout_editor_absoluteY="201dp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/favorite"
+        app:layout_constraintStart_toStartOf="@+id/favorite"
+        app:layout_constraintTop_toBottomOf="@+id/favorite" />/
     >
 </androidx.constraintlayout.widget.ConstraintLayout>
