@@ -46,26 +46,26 @@ public class AttractionDetailActivity extends AppCompatActivity {
         TextView nameTv = findViewById(R.id.nameTv);
         nameTv.setText(name);
         getHourDataFromApi();
-
-        BarChart hourBc = findViewById(R.id.hourBc);
-        ArrayList<BarEntry> visitors = new ArrayList<>();
-        visitors.add(new BarEntry(1, 60));
-        visitors.add(new BarEntry(2, 40));
-        visitors.add(new BarEntry(3, 50));
-        visitors.add(new BarEntry(4, 60));
-        visitors.add(new BarEntry(5, 90));
-        visitors.add(new BarEntry(6, 20));
-        visitors.add(new BarEntry(7, 30));
-
-        BarDataSet barDataSet = new BarDataSet(visitors, "Vistors");
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        barDataSet.setValueTextColor(Color.BLACK);
-        barDataSet.setValueTextSize(16f);
-        BarData barData = new BarData(barDataSet);
-        hourBc.setFitBars(true);
-        hourBc.setData(barData);
-        hourBc.getDescription().setText("TEST");
-        hourBc.animateY(2000);
+//
+//        BarChart hourBc = findViewById(R.id.hourBc);
+//        ArrayList<BarEntry> visitors = new ArrayList<>();
+//        visitors.add(new BarEntry(1, 60));
+//        visitors.add(new BarEntry(2, 40));
+//        visitors.add(new BarEntry(3, 50));
+//        visitors.add(new BarEntry(4, 60));
+//        visitors.add(new BarEntry(5, 90));
+//        visitors.add(new BarEntry(6, 20));
+//        visitors.add(new BarEntry(7, 30));
+//
+//        BarDataSet barDataSet = new BarDataSet(visitors, "Vistors");
+//        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+//        barDataSet.setValueTextColor(Color.BLACK);
+//        barDataSet.setValueTextSize(16f);
+//        BarData barData = new BarData(barDataSet);
+//        hourBc.setFitBars(true);
+//        hourBc.setData(barData);
+//        hourBc.getDescription().setText("TEST");
+//        hourBc.animateY(2000);
     }
 
     private void getHourDataFromApi() {
