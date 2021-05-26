@@ -7,7 +7,9 @@ import com.example.foottraffic.database.AttractionDb;
 import com.example.foottraffic.database.attractionsDao;
 import com.example.foottraffic.pojo.Attractions;
 
-@Database(entities = {Attractions.Venue.class}, version = 1)
+import java.io.Serializable;
+
+@Database(entities = {Attractions.Venue.class}, version = 2)
 public abstract class AttractionsDatabase extends RoomDatabase {
     public abstract attractionsDao attractionsDao();
 }

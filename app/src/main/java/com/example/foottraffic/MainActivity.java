@@ -25,6 +25,7 @@ import com.example.foottraffic.pojo.MultipleResourceActivity;
 import com.example.foottraffic.pojo.ResultDistanceMatrix;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -80,16 +81,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = Room.databaseBuilder(getApplicationContext(), AttractionsDatabase.class, "attraction-database").fallbackToDestructiveMigration().allowMainThreadQueries().build();
         generateTripIv = findViewById(R.id.generateTripIv);
         generateTripIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // button 1 was clicked!
                 Intent intent = new Intent(MainActivity.this, GenerateTripActivity.class);
+                ArrayList<String> venueNames = new ArrayList<String>();
+                ArrayList<String> venueAddresses = new ArrayList<String>();
+                List<Attractions.Venue> venueList = db.attractionsDao().getAllVenues();
+                for (int i = 0; i < venueList.size(); i++) {
+                    venueNames.add(venueList.get(i).getVenueName());
+                    venueAddresses.add(venueList.get(i).getVenueAddress());
+                }
+                intent.putStringArrayListExtra("venue_name", venueNames);
+                intent.putStringArrayListExtra("venue_address", venueAddresses);
+
+                intent.putExtra("venue_list", (Serializable) db.attractionsDao().getAllVenues());
                 startActivity(intent);
             }
         });
-        db = Room.databaseBuilder(getApplicationContext(), AttractionsDatabase.class, "attraction-database").allowMainThreadQueries().build();
 
 //        getAttractionQuietHours("ven_63546a446179304b43514352736d45756530573374614c4a496843", 0);
 //

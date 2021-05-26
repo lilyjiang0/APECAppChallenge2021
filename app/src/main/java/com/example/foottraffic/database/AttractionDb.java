@@ -1,12 +1,14 @@
 package com.example.foottraffic.database;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "attrations")
+@Entity(tableName = "attractions")
 public class AttractionDb {
     @PrimaryKey (autoGenerate = true)
     private int id;
+//    @ColumnInfo(name = "name")
     private String name;
 
     public AttractionDb(int id, String name) {
