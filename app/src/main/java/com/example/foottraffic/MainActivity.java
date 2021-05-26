@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
     private ArrayList<String> mAddress = new ArrayList<>();
+    private ArrayList<String> mID = new ArrayList<>();
     private int NUM_COLUMNS = 2;
 
     private ArrayList<String> permissionsToRequest;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDKm = new ArrayList<>();
     private ArrayList<Double> mDKmDou = new ArrayList<>();
     private ArrayList<Integer> mDBusy = new ArrayList<>();
+    private ArrayList<String> mDID = new ArrayList<>();
     private ArrayList<String> mDAddress = new ArrayList<>();
     private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBrowseAllRecyclerView() {
         // initialise recyclerview for browse all list
         RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, this);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, mID, this);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // get data into an object list
         for (int i = 0; i < mDKmDou.size(); i++) {
-            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i)));
+            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i), mID.get(i)));
         }
         // sort data by km
         Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
@@ -185,12 +187,13 @@ public class MainActivity extends AppCompatActivity {
             mDImage.add(discoverListData.get(i).getImage());
             mDKmDou.add(discoverListData.get(i).getKm());
             mDBusy.add(discoverListData.get(i).getBusy());
+            mDID.add(discoverListData.get(i).getId());
             mDAddress.add(discoverListData.get(i).getAddress());
         }
 
         // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID,this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -267,8 +270,16 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onNext(@NonNull MultipleResourceActivity data) {
                             try {
-                                Log.d("----------------", data.getVenue_info().getVenue_id());
-
+                                if (data.getVenue_info().getVenue_id() != null) {
+                                    // add existing data to the list
+                                    mID.add(data.getVenue_info().getVenue_id());
+                                } else {
+                                    mID.add("null");
+                                }
+                            } catch (Exception e) {
+                                Log.d("----------------", "NO");
+                            }
+                            try {
                                 // check if api return null
                                 if (data.getAnalysis().getVenue_live_busyness() != null) {
                                     // add existing data to the list
@@ -297,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                             // add -100 for error as well
                             mBusy.add(-100);
+                            mID.add("null");
                             // continue the call
                             number++;
                             getForecastFromApi();
