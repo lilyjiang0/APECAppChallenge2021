@@ -25,37 +25,35 @@
                 android:src='@drawable/ic_launcher_background' />
 
             <TextView
+                android:id="@+id/browseAllName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='Name'
-                android:id="@+id/browseAllName"
                 android:layout_below="@id/browseAllIv"
                 android:layout_centerHorizontal="true"
-
-                android:gravity="center"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="8sp"
+                android:layout_marginBottom="1dp"
                 android:autoSizeMaxTextSize="15sp"
-                android:textColor="#000"/>
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text='Name'
+                android:textColor="#000" />
 
             <TextView
                 android:id="@+id/browseAllBusy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/browseAllIv"
-                android:layout_alignBottom="@+id/browseAllName"
-                android:layout_marginStart="-205dp"
-                android:layout_marginLeft="-205dp"
-                android:layout_marginTop="-94dp"
-                android:layout_marginBottom="98dp"
-                android:layout_toEndOf="@+id/browseAllName"
-                android:layout_toRightOf="@+id/browseAllName"
-                android:background="@color/quantum_grey500"
+                android:layout_below="@+id/browseAllName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
                 android:text='Busyness'
                 android:textColor="#100"
-                android:textSize="15sp" />
+                android:textSize="12sp"
+                android:textStyle="italic" />
 
 
         </RelativeLayout>

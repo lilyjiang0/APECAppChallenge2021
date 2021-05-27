@@ -80,7 +80,7 @@
         android:background="@drawable/ic_arrow_back"
         android:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/textView21"
-        app:layou-t_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

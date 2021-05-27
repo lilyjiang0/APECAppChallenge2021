@@ -112,14 +112,14 @@ public class GenerateTripActivity extends AppCompatActivity {
 
 
         btnGenerate = findViewById(R.id.btnGenerate);
-        btnGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GenerateTripActivity.this, GenerateBtnActivity.class);
-                intent.putExtra("list", (Serializable) details);
-                startActivity(intent);
-            }
-        });
+//        btnGenerate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(GenerateTripActivity.this, GenerateBtnActivity.class);
+//                intent.putExtra("list", (Serializable) details);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 

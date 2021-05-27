@@ -25,7 +25,7 @@
                 android:id="@+id/imageView10"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/ic_location_on"
                 android:backgroundTint="@color/black"
@@ -39,28 +39,28 @@
                 android:text="@string/city"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-                app:layout_constraintStart_toEndOf="@+id/imageView10"
-                app:layout_constraintTop_toTopOf="@+id/imageView10" />
+                app:layout_constraintStart_toEndOf="@+id/imageView10" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="29dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/browse_all"
                 android:textColor="@color/black"
-                android:textSize="17dp"
+                android:textSize="19dp"
                 app:layout_constraintBottom_toTopOf="@+id/browseAllRv"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/discoverRv" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/browseAllRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="3dp"
                 android:orientation="horizontal"
                 android:textSize="17dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +71,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/discoverRv"
                 android:layout_width="405dp"
-                android:layout_height="250dp"
+                android:layout_height="258dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.444"
@@ -85,9 +85,9 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="32dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Disover quiet places nearby"
+                android:text="Disover Quiet Places Nearby"
                 android:textColor="@color/black"
-                android:textSize="17dp"
+                android:textSize="19dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/generateTripIv" />
 
@@ -95,7 +95,7 @@
                 android:id="@+id/generateTripIv"
                 android:layout_width="319dp"
                 android:layout_height="69dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:background="@mipmap/start_trip"
                 android:contentDescription="@string/click_to_start_trip"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,14 +104,13 @@
 
             <SearchView
                 android:id="@+id/searchView"
-                android:layout_width="253dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="294dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="24dp"
                 android:background="@drawable/border"
                 app:layout_constraintBottom_toBottomOf="@+id/addressTv"
                 app:layout_constraintStart_toEndOf="@+id/addressTv"
-                app:layout_constraintTop_toTopOf="@+id/addressTv"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="@+id/addressTv" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
