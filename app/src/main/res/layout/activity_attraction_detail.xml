@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/ic_back"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_arrow_back"
         android:backgroundTint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
