@@ -87,7 +87,6 @@
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                android:textSize="18dp"
                 android:fontFamily="@font/roboto_bold"
                 app:layout_constraintEnd_toEndOf="@+id/attractionIv"
                 app:layout_constraintStart_toStartOf="@+id/attractionIv"
@@ -105,8 +104,8 @@
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/weekBc"
-                android:layout_width="302dp"
-                android:layout_height="102dp"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
