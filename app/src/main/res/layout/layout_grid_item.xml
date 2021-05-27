@@ -10,6 +10,7 @@
         android:layout_height='wrap_content'
         app:cardCornerRadius='4dp'
         app:cardElevation='2dp'
+        app:cardMaxElevation="1dp"
         android:layout_centerHorizontal="true">
 
         <RelativeLayout
@@ -29,19 +30,35 @@
                 android:text='Name'
                 android:id="@+id/browseAllName"
                 android:layout_below="@id/browseAllIv"
-                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="15sp"
                 android:textColor="#000"/>
+
             <TextView
+                android:id="@+id/browseAllBusy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/browseAllIv"
+                android:layout_alignBottom="@+id/browseAllName"
+                android:layout_marginStart="-205dp"
+                android:layout_marginLeft="-205dp"
+                android:layout_marginTop="-94dp"
+                android:layout_marginBottom="98dp"
+                android:layout_toEndOf="@+id/browseAllName"
                 android:layout_toRightOf="@+id/browseAllName"
+                android:background="@color/quantum_grey500"
                 android:text='Busyness'
-                android:id="@+id/browseAllBusy"
-                android:layout_below="@id/browseAllIv"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
+                android:textColor="#100"
+                android:textSize="15sp" />
 
-                android:textColor="#100"/>
+
         </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
