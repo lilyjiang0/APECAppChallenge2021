@@ -68,7 +68,7 @@
                 android:id="@+id/btnGenerate"
                 android:layout_width="237dp"
                 android:layout_height="34dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="80dp"
                 android:background="@color/white"
                 android:text="GENERATE"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -144,4 +144,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gradient_background"
+        app:itemIconTint="@color/icon_color"
+        app:itemRippleColor="@color/white"
+        app:itemTextColor="#FFFFFF"
+        app:labelVisibilityMode="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

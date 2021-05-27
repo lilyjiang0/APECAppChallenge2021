@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/open_screen"
     tools:context=".MainActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/discover"
+                android:text="Disover quite places nearby"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/generateTripIv" />

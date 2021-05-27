@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/discoverIv"
         android:layout_width="280dp"
-        android:layout_height="220dp"
+        android:layout_height="207dp"
         android:contentDescription="place cover"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,6 +16,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:layout_width="7dp"
+        android:layout_height="6dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/orange_circle"
+        android:contentDescription="level"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/discoverNameTv"
+        app:layout_constraintEnd_toStartOf="@+id/discoverNameTv"
+        app:layout_constraintTop_toTopOf="@+id/discoverNameTv" />
 
     <TextView
         android:id="@+id/discoverNameTv"
