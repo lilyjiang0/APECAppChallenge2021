@@ -37,7 +37,9 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/browse_all"
+                android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/black"
+                android:textSize="17dp"
                 app:layout_constraintBottom_toTopOf="@+id/browseAllRv"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/discoverRv" />
@@ -46,7 +48,8 @@
                 android:id="@+id/browseAllRv"
                 android:layout_width="409dp"
                 android:layout_height="666dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
+                android:textSize="17dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -55,20 +58,22 @@
                 android:id="@+id/discoverRv"
                 android:layout_width="405dp"
                 android:layout_height="250dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.444"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="32dp"
                 android:text="Disover quite places nearby"
+                android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/black"
+                android:textSize="17dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/generateTripIv" />
 
@@ -90,13 +95,13 @@
                 android:layout_width="322dp"
                 android:layout_height="27dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/border"
                 app:layout_constraintBottom_toTopOf="@+id/generateTripIv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.56"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
