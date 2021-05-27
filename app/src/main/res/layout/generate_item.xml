@@ -98,7 +98,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="3pm-5pm"
         android:textColor="#EE6A90B5"
