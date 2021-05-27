@@ -25,10 +25,12 @@
                 android:id="@+id/imageView10"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/ic_location_on"
                 android:backgroundTint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/generateTripIv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,12 +38,13 @@
                 android:id="@+id/addressTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
                 android:text="@string/city"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-                app:layout_constraintStart_toEndOf="@+id/imageView10"
+                app:layout_constraintEnd_toStartOf="@+id/searchView"
                 app:layout_constraintTop_toTopOf="@+id/imageView10"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView"
@@ -96,11 +99,11 @@
                 android:id="@+id/generateTripIv"
                 android:layout_width="319dp"
                 android:layout_height="69dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:background="@mipmap/start_trip"
                 android:contentDescription="@string/click_to_start_trip"
                 app:layout_constraintEnd_toEndOf="@+id/searchView"
-                app:layout_constraintStart_toStartOf="@+id/searchView"
+                app:layout_constraintStart_toStartOf="@+id/imageView10"
                 app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
             <SearchView
@@ -109,10 +112,10 @@
                 android:layout_height="27dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/border"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.516"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/addressTv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.55"
+                tools:layout_editor_absoluteX="73dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
