@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView generateTripIv;
+    private ProgressBar progressBar;
     private APIInterfaceActivity apiInterface;
     public AttractionsDatabase db;
     List<Attractions.Venue> attractionList = new ArrayList<>();
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar = findViewById(R.id.progressBar);
         db = Room.databaseBuilder(getApplicationContext(), AttractionsDatabase.class, "attraction-database").fallbackToDestructiveMigration().allowMainThreadQueries().build();
         generateTripIv = findViewById(R.id.generateTripIv);
         generateTripIv.setOnClickListener(new View.OnClickListener() {
@@ -289,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                 number++;
                                 getForecastFromApi();
                             } else {
+                                progressBar.setVisibility(View.GONE);
                                 // otherwise set up ui
                                 initBrowseAllRecyclerView();
                                 initDiscoverRecyclerView();
