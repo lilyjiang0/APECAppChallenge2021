@@ -1,0 +1,45 @@
+package com.example.foottraffic;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.os.Bundle;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GenerateResultActivity extends AppCompatActivity {
+
+    private ArrayList<String> venueNameParams = new ArrayList<>();
+    private ArrayList<String> venueAddressParams = new ArrayList<>();
+    private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
+    private Integer dayOfWeek;
+    private RecyclerView discoverRv;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_generate_result);
+        venueNameParams = getIntent().getStringArrayListExtra("venueNameParams");
+        venueAddressParams = getIntent().getStringArrayListExtra("venueAddressParams");
+        quietHourParams = (List<List<Integer>>) getIntent().getSerializableExtra("quietHourParams");
+        dayOfWeek = getIntent().getIntExtra("dayOfWeek", 0);
+
+        initGenerateResultRecyclerView();
+    }
+
+    private void initGenerateResultRecyclerView() {
+        // initialise recyclerview for browse all list
+        RecyclerView recyclerView = findViewById(R.id.discoverRv);
+        generateAdapter generateAdapter = new generateAdapter(venueNameParams, quietHourParams, dayOfWeek, this);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(generateAdapter);
+    }
+
+}

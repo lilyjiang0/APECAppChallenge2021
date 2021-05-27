@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class GenerateTripActivity extends AppCompatActivity {
     private AutoCompleteTextView place3;
     private AutoCompleteTextView place4;
     private AutoCompleteTextView place5;
+    private CalendarView calendarView;
 
     private ArrayList<String> venueNames = new ArrayList<>(MainActivity.mName);
     private ArrayList<String> venueAddresses = new ArrayList<>(MainActivity.mAddress);
@@ -57,6 +59,11 @@ public class GenerateTripActivity extends AppCompatActivity {
 
     List<Integer> myDataList = new ArrayList<>();
     List<Map<String, String>> details = new ArrayList<Map<String, String>>();
+    Map<String, String> detailParams = new HashMap<String, String>();
+    private ArrayList<String> venueNameParams = new ArrayList<>();
+    private ArrayList<String> venueAddressParams = new ArrayList<>();
+    private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
+    private Integer dayOfWeek;
 
     private Button btnGenerate;
 
@@ -89,10 +96,12 @@ public class GenerateTripActivity extends AppCompatActivity {
                 if (item.containsKey(place1.getText().toString())) {
                     getHourDataFromApi(place1.getText().toString(), item.get(place1.getText().toString()));
                     System.out.println(place1.getText().toString());
-                    Map<String, String> element = new HashMap<String, String>();
-                    element.put("venue_name", place1.getText().toString());
-                    element.put("quiet_hours", Arrays.toString(myDataList.toArray()));
-                    details.add(element);
+                    venueNameParams.add(place1.getText().toString());
+                    venueAddressParams.add(item.get(place1.getText().toString()));
+                    quietHourParams.add(myDataList);
+//                    detailParams.put("venue_name1", place1.getText().toString());
+//                    detailParams.put("quiet_hours1", Arrays.toString(myDataList.toArray()));
+//                    details.add(detailParams);
                 }
             }
         });
@@ -102,11 +111,30 @@ public class GenerateTripActivity extends AppCompatActivity {
                 if (item.containsKey(place2.getText().toString())) {
                     getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
                     System.out.println(place2.getText().toString());
-                    Map<String, String> element = new HashMap<String, String>();
-                    element.put("venue_name", place2.getText().toString());
-                    element.put("quiet_hours", Arrays.toString(myDataList.toArray()));
-                    details.add(element);
+                    venueNameParams.add(place2.getText().toString());
+                    venueAddressParams.add(item.get(place2.getText().toString()));
+                    quietHourParams.add(myDataList);
+//                    detailParams.put("venue_name2", place2.getText().toString());
+//                    detailParams.put("quiet_hours2", Arrays.toString(myDataList.toArray()));
+//                    details.add(detailParams);
                 }
+            }
+        });
+
+        // date
+        calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+                if (dayOfWeek < 0) {
+                    dayOfWeek = 6;
+                }
+//                detailParams.put("dayInt", String.valueOf(dayOfWeek));
+                System.out.println("Day int is: " + dayOfWeek);
+//                details.add(detailParams);
             }
         });
 
@@ -115,8 +143,12 @@ public class GenerateTripActivity extends AppCompatActivity {
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GenerateTripActivity.this, GenerateBtnActivity.class);
-                intent.putExtra("list", (Serializable) details);
+                Intent intent = new Intent(GenerateTripActivity.this, GenerateResultActivity.class);
+//                intent.putExtra("list", (Serializable) detailParams);
+                intent.putExtra("venueNameParams", venueNameParams);
+                intent.putExtra("venueAddressParams", venueAddressParams);
+                intent.putExtra("quietHourParams", (Serializable) quietHourParams);
+                intent.putExtra("dayOfWeek", dayOfWeek);
                 startActivity(intent);
             }
         });
@@ -131,17 +163,17 @@ public class GenerateTripActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
                 // check api status
-                Log.d("HEY", String.valueOf(response.body()));
                 ForecastData result = response.body();
-                Log.d("HEY2", String.valueOf(response.body()));
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(result.getVenueInfo().getVenueTimezone()));
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                Log.d("HEY3", String.valueOf(response.body()));
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2;
                 if (result.getAnalysis().get(dayOfWeek).getQuietHours() == null) {
                     System.out.println("This venue is closed.");
                     Log.d("The Code is: " , String.valueOf(response.code()));
                 }
                 if (response.code() == 200) {
+                    if (dayOfWeek < 0) {
+                        dayOfWeek = 6;
+                    }
                     myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
                     System.out.println(Arrays.toString(myDataList.toArray()));
                 }
