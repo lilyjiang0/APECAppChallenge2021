@@ -104,4 +104,7 @@ dependencies {
 
     implementation 'com.sickmartian.calendarview:calendarview:1.0.0'
 
+    implementation 'com.hedgehog.ratingbar:app:1.1.2'
+
+
 }

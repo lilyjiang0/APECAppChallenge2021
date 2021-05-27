@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.foottraffic">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
+        tools:replace="android:theme"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".GenerateBtnActivity"></activity>
         <activity android:name=".GenerateTripActivity" />

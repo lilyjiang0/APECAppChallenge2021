@@ -232,43 +232,7 @@ public class ForecastData {
 
     }
 
-    public class HourAnalysi {
 
-        @SerializedName("hour")
-        @Expose
-        private Integer hour;
-        @SerializedName("intensity_nr")
-        @Expose
-        private Integer intensityNr;
-        @SerializedName("intensity_txt")
-        @Expose
-        private String intensityTxt;
-
-        public Integer getHour() {
-            return hour;
-        }
-
-        public void setHour(Integer hour) {
-            this.hour = hour;
-        }
-
-        public Integer getIntensityNr() {
-            return intensityNr;
-        }
-
-        public void setIntensityNr(Integer intensityNr) {
-            this.intensityNr = intensityNr;
-        }
-
-        public String getIntensityTxt() {
-            return intensityTxt;
-        }
-
-        public void setIntensityTxt(String intensityTxt) {
-            this.intensityTxt = intensityTxt;
-        }
-
-    }
 
     public class PeakHour {
 

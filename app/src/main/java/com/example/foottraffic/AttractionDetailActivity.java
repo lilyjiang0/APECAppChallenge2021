@@ -1,24 +1,36 @@
 package com.example.foottraffic;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
+import com.example.foottraffic.pojo.HourAnalysi;
 import com.example.foottraffic.pojo.WeekForecastData;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.time.LocalDate;
@@ -35,7 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AttractionDetailActivity extends AppCompatActivity {
+public class AttractionDetailActivity extends AppCompatActivity implements OnChartValueSelectedListener {
     private APIInterfaceActivity apiInterface;
     private String name;
     private String address;
@@ -48,6 +60,11 @@ public class AttractionDetailActivity extends AppCompatActivity {
     List<Integer> busyHrsList = new ArrayList<>();
     List<Integer> quietHrsList = new ArrayList<>();
     private int count = 0;
+    TextView openingTime;
+    TextView bCIntensityTxt, bcHour, infoBox, busynessDesc, intensityDesc;
+    RatingBar bcBusyness, bcIntensity;
+    ArrayList<HourAnalysi> hourAnalysis = new ArrayList<>();
+
 
 
 
@@ -65,8 +82,13 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
         TextView nameTv = findViewById(R.id.nameTv);
         TextView busyTv = findViewById(R.id.busyTv);
+        TextView addressTv = findViewById(R.id.aAddressTv);
         ImageView imageIv = findViewById(R.id.attractionIv);
+        openingTime = findViewById(R.id.openingHrsTv);
+
         nameTv.setText(name);
+        openingTime.setText("-");
+        addressTv.setText(address);
         if (busyness != -100) {
             if (busyness < 40) {
                 busyTv.setText("Not Busy");
@@ -94,14 +116,25 @@ public class AttractionDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<ForecastData>() {
             @Override
             public void onResponse(Call<ForecastData> call, Response<ForecastData> response) {
-                Log.d("---------", String.valueOf(response.code()));
                 int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
-                Log.d("_-----------------", String.valueOf(dayOfWeek));
+                if (dayOfWeek == 0) {
+                    dayOfWeek = 7;
+                }
                 // check api status
                 if (response.code() == 200) {
                     BarChart hourBc = findViewById(R.id.hourBc);
                     ArrayList<BarEntry> busy = new ArrayList<>();
+
+                    String openingHrs = String.valueOf(response.body().getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen()) + "am-" + String.valueOf(response.body().getAnalysis().get(dayOfWeek).getDayInfo().getVenueClosed() + "pm");
+                    if (response.body().getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen() != 0 && response.body().getAnalysis().get(dayOfWeek).getDayInfo().getVenueClosed() != 0) {
+                        openingTime.setText(openingHrs);
+                    } else {
+                        openingTime.setText("-");
+                    }
+
+
                     for (int i = 0; i < response.body().getAnalysis().get(dayOfWeek).getDayRaw().size(); i++) {
+                        hourAnalysis.add(new HourAnalysi(response.body().getAnalysis().get(dayOfWeek).getHourAnalysis().get(i).getHour(), response.body().getAnalysis().get(dayOfWeek).getHourAnalysis().get(i).getIntensityNr(), response.body().getAnalysis().get(dayOfWeek).getHourAnalysis().get(i).getIntensityTxt()));
                         if (response.body().getAnalysis().get(dayOfWeek).getDayRaw().get(i) != 0) {
                             if (i + 6 <= 24) {
                                 busy.add(new BarEntry( i + 6, response.body().getAnalysis().get(dayOfWeek).getDayRaw().get(i)));
@@ -124,14 +157,14 @@ public class AttractionDetailActivity extends AppCompatActivity {
                         int size = quietHrsList.size() + busyHrsList.size();
                         for (int k = 0; k < size; k++) {
                             if (k < busyHrsList.size() && busyHrsList != null && !busyHrsList.isEmpty() && busyHrsList.get(k) == i) {
-                                colors.add(Color.rgb(245, 12,10));
+                                colors.add(Color.rgb(234, 91, 72));
                             } else if (k < quietHrsList.size() && quietHrsList != null && !quietHrsList.isEmpty() && quietHrsList.get(k) == i) {
-                                colors.add(Color.rgb(56,199,112));
+                                colors.add(Color.rgb(0, 165, 76));
                             }
                         }
                         count++;
                         if (colors.size() != count) {
-                            colors.add(Color.rgb(52, 232, 235));
+                            colors.add(Color.rgb(0, 142, 255));
                         }
                     }
 
@@ -148,9 +181,15 @@ public class AttractionDetailActivity extends AppCompatActivity {
                     hourBc.getAxisRight().setDrawGridLines(false);
                     hourBc.getAxisLeft().setDrawGridLines(false);
                     hourBc.getXAxis().setDrawGridLines(false);
+                    hourBc.getLegend().setEnabled(false);
+                    XAxis xAxis = hourBc.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+
                     YAxis rightYAxis = hourBc.getAxisRight();
                     rightYAxis.setEnabled(false);
                     hourBc.animateY(2000);
+                    hourBc.setOnChartValueSelectedListener(AttractionDetailActivity.this);
                 }
             }
 
@@ -191,6 +230,9 @@ public class AttractionDetailActivity extends AppCompatActivity {
                     weekBc.getAxisLeft().setDrawGridLines(false);
                     weekBc.getXAxis().setDrawGridLines(false);
                     weekBc.getDescription().setEnabled(false);
+                    weekBc.getLegend().setEnabled(false);
+                    XAxis xAxis = weekBc.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                     YAxis rightYAxis = weekBc.getAxisRight();
                     rightYAxis.setEnabled(false);
                     weekBc.animateY(2000);
@@ -203,5 +245,113 @@ public class AttractionDetailActivity extends AppCompatActivity {
                 Log.d("ERROR", "Api call failed");
             }
         });
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        if (bcBusyness != null) {
+            ((ViewGroup) bcBusyness.getParent()).removeView(bcBusyness);
+            ((ViewGroup) bCIntensityTxt.getParent()).removeView(bCIntensityTxt);
+            ((ViewGroup) bcHour.getParent()).removeView(bcHour);
+            ((ViewGroup) bcIntensity.getParent()).removeView(bcIntensity);
+            ((ViewGroup) infoBox.getParent()).removeView(infoBox);
+            ((ViewGroup) busynessDesc.getParent()).removeView(busynessDesc);
+            ((ViewGroup) intensityDesc.getParent()).removeView(intensityDesc);
+        }
+
+        ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.detailCL);
+        BarChart hourBc = findViewById(R.id.hourBc);
+        TextView weekOverviewTv = findViewById(R.id.weekOverviewTv);
+        ConstraintSet set = new ConstraintSet();
+
+        bcBusyness = new RatingBar(this, null);
+        bCIntensityTxt = new TextView(this);
+        bcHour = new TextView(this);
+        infoBox = new TextView(this);
+        bcIntensity = new RatingBar(this, null);
+        busynessDesc = new TextView(this);
+        intensityDesc = new TextView(this);
+        // set view id, else getId() returns -1
+        bcBusyness.setId(View.generateViewId());
+        bCIntensityTxt.setId(View.generateViewId());
+        bcHour.setId(View.generateViewId());
+        bcIntensity.setId(View.generateViewId());
+        infoBox.setId(View.generateViewId());
+        busynessDesc.setId(View.generateViewId());
+        intensityDesc.setId(View.generateViewId());
+
+        busynessDesc.setText("Busyness");
+        intensityDesc.setText("Intensity");
+                bcBusyness.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+        bcIntensity.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+        bcBusyness.setIsIndicator(true);
+        bcIntensity.setIsIndicator(true);
+        bcBusyness.setStepSize((float) 0.5);
+        bcIntensity.setStepSize((float) 0.5);
+        bcBusyness.setProgressDrawableTiled(ContextCompat.getDrawable(this, R.drawable.custom_rating_bar));
+        bcIntensity.setProgressDrawableTiled(ContextCompat.getDrawable(this, R.drawable.custom_rating_bar));
+        bcBusyness.setNumStars(5);
+        bcIntensity.setNumStars(5);
+        bcBusyness.setScaleX((float) 0.4);
+        bcBusyness.setScaleY((float) 0.4);
+        bcIntensity.setScaleX((float) 0.4);
+        bcIntensity.setScaleY((float) 0.4);
+
+
+        for (int i = 0; i < hourAnalysis.size(); i++) {
+            if(hourAnalysis.get(i).getHour() == (int)e.getX()) {
+                bcBusyness.setRating(e.getY() / 100 * 5);
+                bCIntensityTxt.setText(String.valueOf(hourAnalysis.get(i).getIntensityTxt()));
+                bcHour.setText(String.valueOf(hourAnalysis.get(i).getHour()+ ":00"));
+                bcIntensity.setRating(hourAnalysis.get(i).getIntensityNr() + 3);
+                Log.d("+++++++++++", String.valueOf(hourAnalysis.get(i).getHour()));
+                Log.d("+++++++++++", String.valueOf(hourAnalysis.get(i).getIntensityNr()));
+                Log.d("+++++++++++", String.valueOf(hourAnalysis.get(i).getIntensityTxt()));
+            }
+        }
+
+        infoBox.setBackgroundColor(Color.LTGRAY);
+        infoBox.setHeight(220);
+        infoBox.setWidth(700);
+
+        parentLayout.addView(infoBox, 0);
+        parentLayout.addView(bcBusyness, 1);
+        parentLayout.addView(bCIntensityTxt, 2);
+        parentLayout.addView(bcHour, 3);
+        parentLayout.addView(bcIntensity, 4);
+        parentLayout.addView(busynessDesc, 4);
+        parentLayout.addView(intensityDesc, 4);
+
+        set.clone(parentLayout);
+        // connect start and end point of views, in this case top of child to top of parent.
+        set.connect(infoBox.getId(), ConstraintSet.TOP, hourBc.getId(), ConstraintSet.BOTTOM, 5);
+        set.connect(infoBox.getId(), ConstraintSet.LEFT, hourBc.getId(), ConstraintSet.LEFT, 0);
+        set.connect(infoBox.getId(), ConstraintSet.RIGHT, hourBc.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(bCIntensityTxt.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.TOP, 2);
+        set.connect(bCIntensityTxt.getId(), ConstraintSet.LEFT, infoBox.getId(), ConstraintSet.LEFT, 10);
+        set.connect(bcHour.getId(), ConstraintSet.LEFT, bCIntensityTxt.getId(), ConstraintSet.RIGHT, 8);
+        set.connect(bcHour.getId(), ConstraintSet.TOP, bCIntensityTxt.getId(), ConstraintSet.TOP, 0);
+        set.connect(intensityDesc.getId(), ConstraintSet.TOP, bCIntensityTxt.getId(), ConstraintSet.BOTTOM, 6);
+        set.connect(intensityDesc.getId(), ConstraintSet.LEFT, bCIntensityTxt.getId(), ConstraintSet.LEFT, 0);
+        set.connect(bcIntensity.getId(), ConstraintSet.TOP, intensityDesc.getId(), ConstraintSet.TOP, 0);
+        set.connect(bcIntensity.getId(), ConstraintSet.LEFT, intensityDesc.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(bcIntensity.getId(), ConstraintSet.BOTTOM, intensityDesc.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(busynessDesc.getId(), ConstraintSet.TOP, intensityDesc.getId(), ConstraintSet.BOTTOM, 6);
+        set.connect(busynessDesc.getId(), ConstraintSet.LEFT, intensityDesc.getId(), ConstraintSet.LEFT, 0);
+        set.connect(bcBusyness.getId(), ConstraintSet.TOP, busynessDesc.getId(), ConstraintSet.TOP, 0);
+        set.connect(bcBusyness.getId(), ConstraintSet.LEFT, busynessDesc.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(bcBusyness.getId(), ConstraintSet.BOTTOM, busynessDesc.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(weekOverviewTv.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.BOTTOM, 16);
+
+        set.applyTo(parentLayout);
+    }
+
+    @Override
+    public void onNothingSelected() {
+
     }
 }
