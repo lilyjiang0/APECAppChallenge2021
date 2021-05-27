@@ -7,6 +7,8 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,6 +69,8 @@ public class GenerateTripActivity extends AppCompatActivity {
 
     private Button btnGenerate;
 
+    private Map<String, String> vNames = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,30 +100,45 @@ public class GenerateTripActivity extends AppCompatActivity {
                 if (item.containsKey(place1.getText().toString())) {
                     getHourDataFromApi(place1.getText().toString(), item.get(place1.getText().toString()));
                     System.out.println(place1.getText().toString());
-                    venueNameParams.add(place1.getText().toString());
-                    venueAddressParams.add(item.get(place1.getText().toString()));
+                    if (!vNames.containsKey("place1")) {
+                        vNames.put("place1", place1.getText().toString());
+                    }
+                    else if (vNames.containsKey("place1")) {
+                        vNames.replace("place1", place1.getText().toString());
+                    }
+//                    venueAddressParams.add(item.get(place1.getText().toString()));
                     quietHourParams.add(myDataList);
 //                    detailParams.put("venue_name1", place1.getText().toString());
 //                    detailParams.put("quiet_hours1", Arrays.toString(myDataList.toArray()));
 //                    details.add(detailParams);
+//                    System.out.println("The venue name params are: " + Arrays.toString(venueNameParams.toArray()));
                 }
             }
+
         });
+
         place2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (item.containsKey(place2.getText().toString())) {
                     getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
                     System.out.println(place2.getText().toString());
-                    venueNameParams.add(place2.getText().toString());
-                    venueAddressParams.add(item.get(place2.getText().toString()));
+                    if (!vNames.containsKey("place2")) {
+                        vNames.put("place2", place2.getText().toString());
+                    }
+                    else if (vNames.containsKey("place2")) {
+                        vNames.replace("place2", place2.getText().toString());
+                    }
+//                    venueAddressParams.add(item.get(place2.getText().toString()));
                     quietHourParams.add(myDataList);
+                    System.out.println("Queit hours are: " + Arrays.toString(quietHourParams.toArray()));
 //                    detailParams.put("venue_name2", place2.getText().toString());
 //                    detailParams.put("quiet_hours2", Arrays.toString(myDataList.toArray()));
 //                    details.add(detailParams);
                 }
             }
         });
+
 
         // date
         calendarView = findViewById(R.id.calendarView);
@@ -143,10 +162,20 @@ public class GenerateTripActivity extends AppCompatActivity {
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!vNames.containsKey("place1")) {
+                    System.out.println("Must fill in Address 1 filed");
+                    return;
+                }else if (vNames.containsKey("place1")) {
+                    venueNameParams.add(vNames.get("place1"));
+                    if (vNames.containsKey("place2")) {
+                        venueNameParams.add(vNames.get("place2"));
+                    }
+                }
+                System.out.println("It is: " + Arrays.toString(venueNameParams.toArray()));
                 Intent intent = new Intent(GenerateTripActivity.this, GenerateResultActivity.class);
 //                intent.putExtra("list", (Serializable) detailParams);
-                intent.putExtra("venueNameParams", venueNameParams);
-                intent.putExtra("venueAddressParams", venueAddressParams);
+                intent.putStringArrayListExtra("venueNameParams", venueNameParams);
+                intent.putStringArrayListExtra("venueAddressParams", venueAddressParams);
                 intent.putExtra("quietHourParams", (Serializable) quietHourParams);
                 intent.putExtra("dayOfWeek", dayOfWeek);
                 startActivity(intent);

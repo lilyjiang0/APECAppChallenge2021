@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHolder> {
@@ -62,7 +63,7 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.activity_generate_result, viewGroup, false);
+                .inflate(R.layout.generate_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
@@ -71,7 +72,12 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         holder.venueName.setText(venueNameParams.get(position));
-        holder.day.setText(String.valueOf(DayOfWeek.of(dayOfWeek + 1)));
+        if (quietHourParams.get(position).size() == 0) {
+            holder.quietHours.setText("--");
+        } else {
+            holder.quietHours.setText(Arrays.toString(quietHourParams.get(position).toArray()));
+        }
+        holder.day.setText(DayOfWeek.of(dayOfWeek + 1) + "");
     }
 
     @Override
