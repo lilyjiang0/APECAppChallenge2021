@@ -2,6 +2,7 @@ package com.example.foottraffic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -58,10 +60,13 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
         holder.name.setText(mName.get(position));
         if (mBusy.get(position) != 0 && mBusy.get(position) != -100) {
             if (mBusy.get(position) < 40) {
+                holder.busyDot.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.green_circle));
                 holder.busy.setText("Not Busy");
             } else if (mBusy.get(position) < 70) {
+                holder.busyDot.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.orange_circle));
                 holder.busy.setText("A little Busy");
             } else {
+                holder.busyDot.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.red_circle));
                 holder.busy.setText("Busy");
             }
         } else {
@@ -92,12 +97,16 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
         ImageView image;
         TextView name;
         TextView busy;
+        ImageView busyDot;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             this.image = itemView.findViewById(R.id.browseAllIv);
             this.name = itemView.findViewById(R.id.browseAllName);
             this.busy = itemView.findViewById(R.id.browseAllBusy);
+            this.busyDot = itemView.findViewById(R.id.browseAllDot);
         }
     }
+
+
 }

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -19,11 +18,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foottraffic.api.APIClientActivity;
-import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
 import com.example.foottraffic.pojo.HourAnalysi;
 import com.example.foottraffic.pojo.WeekForecastData;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -31,19 +31,12 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,12 +61,11 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
     ArrayList<HourAnalysi> hourAnalysis = new ArrayList<>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attraction_detail);
-
-
 
         name = getIntent().getStringExtra("VENUE_NAME");
         address = getIntent().getStringExtra("VENUE_ADDRESS");
@@ -86,8 +78,20 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
         TextView busyTv = findViewById(R.id.busyTv);
         TextView addressTv = findViewById(R.id.aAddressTv);
         ImageView imageIv = findViewById(R.id.attractionIv);
+        TextView backBtn1 = findViewById(R.id.backBtn2);
+        ImageView backBtn2 = findViewById(R.id.backBtn1);
         openingTime = findViewById(R.id.openingHrsTv);
 
+        backBtn1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        backBtn2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
         nameTv.setText(name);
         openingTime.setText("-");
         addressTv.setText(address);
@@ -177,13 +181,17 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
                     barDataSet.setValueTextSize(10f);
                     barDataSet.setDrawValues(false);
                     BarData barData = new BarData(barDataSet);
+                    Legend l = hourBc.getLegend();
+//                    hourBc.getLegend().setEnabled(false);
+                    LegendEntry l1=new LegendEntry("Quiet hrs",Legend.LegendForm.CIRCLE,10f,2f,null,Color.rgb(0, 165, 76));
+                    LegendEntry l2=new LegendEntry("Busy hrs", Legend.LegendForm.CIRCLE,10f,2f,null,Color.rgb(234, 91, 72));
+                    l.setCustom(new LegendEntry[]{l1,l2});
                     hourBc.setFitBars(true);
                     hourBc.setData(barData);
                     hourBc.getDescription().setEnabled(false);
                     hourBc.getAxisRight().setDrawGridLines(false);
                     hourBc.getAxisLeft().setDrawGridLines(false);
                     hourBc.getXAxis().setDrawGridLines(false);
-                    hourBc.getLegend().setEnabled(false);
                     hourBc.setNoDataText("Not available");
                     XAxis xAxis = hourBc.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);

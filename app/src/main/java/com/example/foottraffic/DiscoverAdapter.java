@@ -82,12 +82,14 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
         ImageView image;
         TextView name;
         TextView km;
+        ImageView dot;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             this.image = itemView.findViewById(R.id.discoverIv);
             this.name = itemView.findViewById(R.id.discoverNameTv);
             this.km = itemView.findViewById(R.id.discoverKmTv);
+            this.dot = itemView.findViewById(R.id.dot);
 
         }
     }

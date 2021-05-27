@@ -17,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -66,7 +68,6 @@ public class GenerateTripActivity extends AppCompatActivity {
     private ArrayList<String> venueAddressParams = new ArrayList<>();
     private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
     private Integer dayOfWeek;
-
     private Button btnGenerate;
 
     private Map<String, String> vNames = new HashMap<>();
@@ -77,6 +78,20 @@ public class GenerateTripActivity extends AppCompatActivity {
         ArrayList<String> n = new ArrayList<>(MainActivity.mName);
 //        venueList = (List<Attractions.Venue>) getIntent().getSerializableExtra("venue_list");
         setContentView(R.layout.activity_generate_trip);
+        TextView backBtn3 = findViewById(R.id.backBtn4);
+        ImageView backBtn4 = findViewById(R.id.backBtn3);
+
+        backBtn3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        backBtn4.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         Map<String, String> item = new HashMap<String, String>();
         for (int i = 0; i < venueNames.size(); i++) {
             item.put(venueNames.get(i), venueAddresses.get(i));

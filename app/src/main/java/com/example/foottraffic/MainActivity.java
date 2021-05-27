@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView secondFragment1;
     private String api_key_public_besttime = "pub_e6af9cfdcffc4b5da127d98fec9a9b89";
     ArrayList<String> image = new ArrayList<>();
+    String city, address, inputedCity;
+    TextView addressTv;
 
 
     @Override
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
 
         setUserCity();
         getAttractionsFromApi();
+
+
         // TODO: switch to image api in future development
         mImage.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
         mImage.add("https://images.unsplash.com/photo-1620943694949-b438574c75a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80");
@@ -144,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUserCity() {
-        TextView addressTv = findViewById(R.id.addressTv);
+        addressTv = findViewById(R.id.addressTv);
         // get info from other activities
-        String city = getIntent().getStringExtra("USER_CITY");
-        String address = getIntent().getStringExtra("USER_ADDRESS");
-        String inputedCity = getIntent().getStringExtra("CITY");
+        city = getIntent().getStringExtra("USER_CITY");
+        address = getIntent().getStringExtra("USER_ADDRESS");
+        inputedCity = getIntent().getStringExtra("CITY");
         // set user's city
         if (city != null) {
             // if info come from open screen
@@ -195,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         // sort data by km
         Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
         // remove any attractions busyness that is null or >30%
-        discoverListData.removeIf(n -> (n.getBusy() > 30));
+        discoverListData.removeIf(n -> (n.getBusy() > 40));
         discoverListData.removeIf(n -> (n.getBusy() < 0));
         // clear old km list
         mDKmDou.clear();
@@ -444,4 +448,25 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //
 //    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putString("city", String.valueOf(addressTv.getText()));
+        // etc.
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        addressTv.setText(savedInstanceState.getString("city"));
+//        double myDouble = savedInstanceState.getDouble("myDouble");
+//        int myInt = savedInstanceState.getInt("MyInt");
+//        String myString = savedInstanceState.getString("MyString");
+    }
 }

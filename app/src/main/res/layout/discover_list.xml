@@ -18,11 +18,11 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="7dp"
-        android:layout_height="6dp"
+        android:id="@+id/dot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/orange_circle"
+        android:background="@drawable/green_circle"
         android:contentDescription="level"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/discoverNameTv"
@@ -51,6 +51,6 @@
         android:textColor="@color/black"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="@+id/discoverNameTv"
-        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintStart_toStartOf="@+id/dot"
         app:layout_constraintTop_toBottomOf="@+id/discoverNameTv" />
 </androidx.constraintlayout.widget.ConstraintLayout>
