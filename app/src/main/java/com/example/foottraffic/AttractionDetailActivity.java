@@ -6,8 +6,10 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -66,12 +68,12 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
     ArrayList<HourAnalysi> hourAnalysis = new ArrayList<>();
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attraction_detail);
+
+
 
         name = getIntent().getStringExtra("VENUE_NAME");
         address = getIntent().getStringExtra("VENUE_ADDRESS");
@@ -315,9 +317,21 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
             }
         }
 
-        infoBox.setBackgroundColor(Color.LTGRAY);
-        infoBox.setHeight(220);
+        infoBox.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+        infoBox.setHeight(270);
         infoBox.setWidth(700);
+        infoBox.setPadding(10, 10, 10, 10);
+
+        bCIntensityTxt.setTextSize(14);
+        bCIntensityTxt.setAllCaps(true);
+        bCIntensityTxt.setTextColor(Color.BLACK);
+        bCIntensityTxt.setTypeface(null, Typeface.BOLD);
+
+        bcHour.setTextColor(ContextCompat.getColor(this, R.color.a));
+        bcHour.setTextSize(12);
+        bcHour.setTypeface(null, Typeface.BOLD);
+
+
 
         parentLayout.addView(infoBox, 0);
         parentLayout.addView(bcBusyness, 1);
@@ -329,25 +343,25 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
 
         set.clone(parentLayout);
         // connect start and end point of views, in this case top of child to top of parent.
-        set.connect(infoBox.getId(), ConstraintSet.TOP, hourBc.getId(), ConstraintSet.BOTTOM, 5);
+        set.connect(infoBox.getId(), ConstraintSet.TOP, hourBc.getId(), ConstraintSet.BOTTOM, 15);
         set.connect(infoBox.getId(), ConstraintSet.LEFT, hourBc.getId(), ConstraintSet.LEFT, 0);
         set.connect(infoBox.getId(), ConstraintSet.RIGHT, hourBc.getId(), ConstraintSet.RIGHT, 0);
-        set.connect(bCIntensityTxt.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.TOP, 2);
-        set.connect(bCIntensityTxt.getId(), ConstraintSet.LEFT, infoBox.getId(), ConstraintSet.LEFT, 10);
-        set.connect(bcHour.getId(), ConstraintSet.LEFT, bCIntensityTxt.getId(), ConstraintSet.RIGHT, 8);
+        set.connect(bCIntensityTxt.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.TOP, 40);
+        set.connect(bCIntensityTxt.getId(), ConstraintSet.LEFT, infoBox.getId(), ConstraintSet.LEFT, 50);
+        set.connect(bcHour.getId(), ConstraintSet.LEFT, bCIntensityTxt.getId(), ConstraintSet.RIGHT, 15);
         set.connect(bcHour.getId(), ConstraintSet.TOP, bCIntensityTxt.getId(), ConstraintSet.TOP, 0);
-        set.connect(intensityDesc.getId(), ConstraintSet.TOP, bCIntensityTxt.getId(), ConstraintSet.BOTTOM, 6);
+        set.connect(bcHour.getId(), ConstraintSet.BOTTOM, bCIntensityTxt.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(intensityDesc.getId(), ConstraintSet.TOP, bCIntensityTxt.getId(), ConstraintSet.BOTTOM, 20);
         set.connect(intensityDesc.getId(), ConstraintSet.LEFT, bCIntensityTxt.getId(), ConstraintSet.LEFT, 0);
         set.connect(bcIntensity.getId(), ConstraintSet.TOP, intensityDesc.getId(), ConstraintSet.TOP, 0);
         set.connect(bcIntensity.getId(), ConstraintSet.LEFT, intensityDesc.getId(), ConstraintSet.RIGHT, 0);
         set.connect(bcIntensity.getId(), ConstraintSet.BOTTOM, intensityDesc.getId(), ConstraintSet.BOTTOM, 0);
-        set.connect(busynessDesc.getId(), ConstraintSet.TOP, intensityDesc.getId(), ConstraintSet.BOTTOM, 6);
+        set.connect(busynessDesc.getId(), ConstraintSet.TOP, intensityDesc.getId(), ConstraintSet.BOTTOM, 20);
         set.connect(busynessDesc.getId(), ConstraintSet.LEFT, intensityDesc.getId(), ConstraintSet.LEFT, 0);
         set.connect(bcBusyness.getId(), ConstraintSet.TOP, busynessDesc.getId(), ConstraintSet.TOP, 0);
         set.connect(bcBusyness.getId(), ConstraintSet.LEFT, busynessDesc.getId(), ConstraintSet.RIGHT, 0);
         set.connect(bcBusyness.getId(), ConstraintSet.BOTTOM, busynessDesc.getId(), ConstraintSet.BOTTOM, 0);
         set.connect(line.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.BOTTOM, 16);
-
         set.applyTo(parentLayout);
     }
 

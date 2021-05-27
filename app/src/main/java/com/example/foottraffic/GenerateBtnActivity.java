@@ -1,24 +1,18 @@
-//package com.example.foottraffic;
-//
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//import android.content.Intent;
-//import android.os.Bundle;
-//import android.widget.EditText;
-//import android.widget.TextView;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Map;
-//
+package com.example.foottraffic;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 //public class GenerateBtnActivity extends AppCompatActivity {
 //
-//    private TextView editTextTextPersonName1;
-//    private TextView editTextTextPersonName2;
-//    private TextView editTextTextPersonName3;
-//    private TextView editTextTextPersonName4;
-//    private TextView editTextTextPersonName5;
-//
+//    private TextView editTextTextPersonName;
 //    private List<Map<String, String>> details = new ArrayList<Map<String, String>>();
 //
 //    @Override
@@ -45,6 +39,6 @@
 //////                editTextTextPersonName5.setText(details.get(i).get("venue_name"));
 //////            }
 ////        }
-//
+
 //    }
 //}

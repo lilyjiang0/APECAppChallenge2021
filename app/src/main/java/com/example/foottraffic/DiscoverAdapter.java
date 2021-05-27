@@ -26,15 +26,17 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
     private ArrayList<Double> mKm = new ArrayList<>();
     private ArrayList<String> mID = new ArrayList<>();
     private ArrayList<Integer> mBusy = new ArrayList<>();
+    private ArrayList<String> image = new ArrayList<>();
     private Context mContext;
 
-    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mAddress, ArrayList<Double> mKm, ArrayList<String> mID, ArrayList<Integer> mBusy, Context mContext) {
+    public DiscoverAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<String> mAddress, ArrayList<Double> mKm, ArrayList<String> mID, ArrayList<Integer> mBusy, ArrayList<String> image, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mAddress = mAddress;
         this.mKm = mKm;
         this.mID = mID;
         this.mBusy = mBusy;
+        this.image = image;
         this.mContext = mContext;
     }
 
@@ -65,7 +67,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
                 intent.putExtra("VENUE_NAME", mName.get(position));
                 intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
                 intent.putExtra("VENUE_ID", mID.get(position));
-                intent.putExtra("VENUE_IMAGE", mImage.get(position));
+                intent.putExtra("VENUE_IMAGE", image.get(position));
                 mContext.startActivity(intent);
             }
         });

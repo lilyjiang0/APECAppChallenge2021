@@ -72,13 +72,15 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> mDBusy = new ArrayList<>();
     private ArrayList<String> mDID = new ArrayList<>();
     private ArrayList<String> mDAddress = new ArrayList<>();
+    private ArrayList<String> mDImagee = new ArrayList<>();
     private String apiKey = "pri_f9cc4722a147468a85e2696073b71b4f";
     private Integer number = 0;
     private String userLocation;
     private String addressInputForApi = "";
     List<DiscoverListData> discoverListData = new ArrayList<DiscoverListData>();
-
+    ImageView secondFragment1;
     private String api_key_public_besttime = "pub_e6af9cfdcffc4b5da127d98fec9a9b89";
+    ArrayList<String> image = new ArrayList<>();
 
 
     @Override
@@ -98,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        secondFragment1 = findViewById(R.id.secondFragment1);
+//        secondFragment1.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, ChooseGameActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
 //        getAttractionQuietHours("ven_63546a446179304b43514352736d45756530573374614c4a496843", 0);
 //
         String start = "Washington,DC";
@@ -106,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUserCity();
         getAttractionsFromApi();
+        // TODO: switch to image api in future development
         mImage.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
         mImage.add("https://images.unsplash.com/photo-1620943694949-b438574c75a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80");
         mImage.add("https://images.unsplash.com/photo-1558949315-d484360311fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=967&q=80");
@@ -118,6 +129,18 @@ public class MainActivity extends AppCompatActivity {
         mImage.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         mImage.add("https://images.unsplash.com/photo-1567309676325-2b237f42861f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
 
+
+        image.add("https://images.unsplash.com/photo-1595644112441-039eebee38a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80");
+        image.add("https://images.unsplash.com/photo-1485975229842-849d65f05934?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80");
+        image.add("https://images.unsplash.com/photo-1618667757685-1da2ea33eef1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80");
+        image.add("https://images.unsplash.com/photo-1595387426463-bef727e35bb3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80");
+        image.add("https://images.unsplash.com/photo-1596601033477-967dcf4e1056?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1466&q=80");
+        image.add("https://images.pexels.com/photos/5707607/pexels-photo-5707607.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+        image.add("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Mrs_Macquarie%27s_Chair_2013.jpg/1600px-Mrs_Macquarie%27s_Chair_2013.jpg");
+        image.add("https://images.unsplash.com/photo-1564454941998-ca87e7cc6fee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80");
+        image.add("https://images.unsplash.com/photo-1529682668343-870962b235a2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80");
+        image.add("https://images.unsplash.com/photo-1595750376349-54363e64af36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80");
+        image.add("https://cdn.pixabay.com/photo/2015/05/02/11/51/romy-schneider-749850_1280.jpg");
     }
 
     private void setUserCity() {
@@ -153,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBrowseAllRecyclerView() {
         // initialise recyclerview for browse all list
         RecyclerView recyclerView = findViewById(R.id.browseAllRv);
-        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, mID, this);
+        browseAllAdapter browseAllAdapter = new browseAllAdapter(mName, mImage, mBusy, mAddress, mID, image,this);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(browseAllAdapter);
@@ -167,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // get data into an object list
         for (int i = 0; i < mDKmDou.size(); i++) {
-            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i), mID.get(i)));
+            discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i), mID.get(i), image.get(i)));
         }
         // sort data by km
         Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
@@ -184,11 +207,12 @@ public class MainActivity extends AppCompatActivity {
             mDBusy.add(discoverListData.get(i).getBusy());
             mDID.add(discoverListData.get(i).getId());
             mDAddress.add(discoverListData.get(i).getAddress());
+            mDImagee.add(discoverListData.get(i).getmImage());
         }
 
         // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID, mDBusy,this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID, mDBusy, mDImagee,this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);

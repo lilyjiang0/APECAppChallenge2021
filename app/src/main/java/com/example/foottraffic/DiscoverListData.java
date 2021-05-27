@@ -7,15 +7,17 @@ public class DiscoverListData{
     private String address;
     private Integer busy;
     private String id;
+    private String mImage;
 
 
-    public DiscoverListData(Double km, String name, String image, String address, Integer busy, String id) {
+    public DiscoverListData(Double km, String name, String image, String address, Integer busy, String id, String mImage) {
         this.km = km;
         this.name = name;
         this.image = image;
         this.address = address;
         this.busy = busy;
         this.id = id;
+        this.mImage = mImage;
     }
 
     public Double getKm() {
@@ -64,5 +66,13 @@ public class DiscoverListData{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getmImage() {
+        return mImage;
+    }
+
+    public void setmImage(String mImage) {
+        this.mImage = mImage;
     }
 }

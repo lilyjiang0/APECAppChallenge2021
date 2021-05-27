@@ -26,14 +26,16 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
     private ArrayList<Integer> mBusy = new ArrayList<>();
     private ArrayList<String> mAddress = new ArrayList<>();
     private ArrayList<String> mID = new ArrayList<>();
+    private ArrayList<String> image = new ArrayList<>();
     private Context mContext;
 
-    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, ArrayList<String> mAddress, ArrayList<String> mID, Context mContext) {
+    public browseAllAdapter(ArrayList<String> mName, ArrayList<String> mImage, ArrayList<Integer> mBusy, ArrayList<String> mAddress, ArrayList<String> mID, ArrayList<String> image, Context mContext) {
         this.mName = mName;
         this.mImage = mImage;
         this.mBusy = mBusy;
         this.mAddress = mAddress;
         this.mID = mID;
+        this.image = image;
         this.mContext = mContext;
     }
 
@@ -55,7 +57,13 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 .into(holder.image);
         holder.name.setText(mName.get(position));
         if (mBusy.get(position) != 0 && mBusy.get(position) != -100) {
-            holder.busy.setText(mBusy.get(position) + "");
+            if (mBusy.get(position) < 40) {
+                holder.busy.setText("Not Busy");
+            } else if (mBusy.get(position) < 70) {
+                holder.busy.setText("A little Busy");
+            } else {
+                holder.busy.setText("Busy");
+            }
         } else {
             holder.busy.setText("");
         }
@@ -67,8 +75,9 @@ public class browseAllAdapter extends RecyclerView.Adapter<browseAllAdapter.View
                 intent.putExtra("VENUE_NAME", mName.get(position));
                 intent.putExtra("VENUE_ADDRESS", mAddress.get(position));
                 intent.putExtra("VENUE_ID", mID.get(position));
-                intent.putExtra("VENUE_IMAGE", mImage.get(position));
+                intent.putExtra("VENUE_IMAGE", image.get(position));
                 intent.putExtra("VENUE_BUSY", mBusy.get(position));
+
                 mContext.startActivity(intent);
             }
         });
