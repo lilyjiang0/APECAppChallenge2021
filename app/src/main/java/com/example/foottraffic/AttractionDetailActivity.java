@@ -98,7 +98,7 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
                 busyTv.setText("Busy");
             }
         } else {
-            busyTv.setText("");
+            busyTv.setText("-");
         }
         Glide.with(this).load(image).into(imageIv);
 
@@ -182,6 +182,7 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
                     hourBc.getAxisLeft().setDrawGridLines(false);
                     hourBc.getXAxis().setDrawGridLines(false);
                     hourBc.getLegend().setEnabled(false);
+                    hourBc.setNoDataText("Not available");
                     XAxis xAxis = hourBc.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
@@ -261,7 +262,7 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
 
         ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.detailCL);
         BarChart hourBc = findViewById(R.id.hourBc);
-        TextView weekOverviewTv = findViewById(R.id.weekOverviewTv);
+        TextView line = findViewById(R.id.line);
         ConstraintSet set = new ConstraintSet();
 
         bcBusyness = new RatingBar(this, null);
@@ -345,7 +346,7 @@ public class AttractionDetailActivity extends AppCompatActivity implements OnCha
         set.connect(bcBusyness.getId(), ConstraintSet.TOP, busynessDesc.getId(), ConstraintSet.TOP, 0);
         set.connect(bcBusyness.getId(), ConstraintSet.LEFT, busynessDesc.getId(), ConstraintSet.RIGHT, 0);
         set.connect(bcBusyness.getId(), ConstraintSet.BOTTOM, busynessDesc.getId(), ConstraintSet.BOTTOM, 0);
-        set.connect(weekOverviewTv.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.BOTTOM, 16);
+        set.connect(line.getId(), ConstraintSet.TOP, infoBox.getId(), ConstraintSet.BOTTOM, 16);
 
         set.applyTo(parentLayout);
     }
