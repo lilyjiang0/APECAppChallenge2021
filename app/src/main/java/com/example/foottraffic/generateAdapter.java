@@ -84,12 +84,14 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
             quietHourParams.get(position);
             holder.quietHours.setText(Arrays.toString(quietHourParams.get(position).toArray()));
         }
-        holder.day.setText(DayOfWeek.of(dayOfWeek + 1) + "");
+        String[] strDays = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        holder.day.setText(strDays[dayOfWeek]);
         System.out.println("res is: " + venueOpenParams.get(position).toString());
-        if (venueOpenParams.get(position).contains(null)) {
+        if (venueOpenParams.get(position).isEmpty() || venueClosedParams.get(position).equals("") || venueClosedParams.get(position) == null) {
             holder.tradingHour.setText("It's closed today.");
         } else {
-            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + venueClosedParams.get(position) + "pm");
+            Integer closedPM = Integer.valueOf(venueClosedParams.get(position)) - 12;
+            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
         }
     }
 
