@@ -91,7 +91,7 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
             holder.tradingHour.setText("It's closed today.");
         } else {
             Integer closedPM = Integer.valueOf(venueClosedParams.get(position)) - 12;
-            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+            holder.tradingHour.setText("Trading hours: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
         }
     }
 
