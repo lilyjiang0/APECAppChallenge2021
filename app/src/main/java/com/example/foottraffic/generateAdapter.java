@@ -77,7 +77,7 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         } else {
             holder.quietHours.setText(Arrays.toString(quietHourParams.get(position).toArray()));
         }
-        holder.day.setText(DayOfWeek.of(dayOfWeek + 1) + "");
+        holder.day.setText(String.valueOf(DayOfWeek.of(dayOfWeek + 1)));
     }
 
     @Override
