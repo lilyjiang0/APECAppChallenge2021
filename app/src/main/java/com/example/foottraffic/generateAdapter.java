@@ -3,6 +3,7 @@ package com.example.foottraffic;
 
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,13 +87,26 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         }
         String[] strDays = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
         holder.day.setText(strDays[dayOfWeek]);
-        System.out.println("res is: " + venueOpenParams.get(position).toString());
-        if (venueOpenParams.get(position).isEmpty() || venueClosedParams.get(position).equals("") || venueClosedParams.get(position) == null) {
-            holder.tradingHour.setText("It's closed today.");
-        } else {
+//        userEmail != null && (!TextUtils.equals(userEmail ,"null")) && (!TextUtils.isEmpty(userEmail))
+        System.out.println("it: " + Arrays.toString(venueOpenParams.stream().toArray()));
+//        if (TextUtils.isDigitsOnly(venueClosedParams.get(position)) == false) {
+//            holder.tradingHour.setText("It's closed today.");
+//        } else {
+        Integer closedTime = Integer.parseInt("0" + venueClosedParams.get(position).trim()) - 12;
+        System.out.println("int" + closedTime);
+        // Integer.parseInt( "0" + " ".trim())
+        try {
             Integer closedPM = Integer.valueOf(venueClosedParams.get(position)) - 12;
-            holder.tradingHour.setText("Trading hours: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+        } catch (NumberFormatException e) {
+            holder.tradingHour.setText("It's closed today.");
+        } catch (NullPointerException e) {
+            holder.tradingHour.setText("It's closed today.");
+        } catch (IndexOutOfBoundsException e) {
+            holder.tradingHour.setText("It's closed today.");
         }
+
+//        }
     }
 
     @Override
