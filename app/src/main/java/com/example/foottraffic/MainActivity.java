@@ -192,12 +192,17 @@ public class MainActivity extends AppCompatActivity {
             s = s.replaceAll(" km", "");
             mDKmDou.add(Double.valueOf(s));
         }
+
         // get data into an object list
         for (int i = 0; i < mDKmDou.size(); i++) {
             discoverListData.add(new DiscoverListData(mDKmDou.get(i), mName.get(i), mImage.get(i), mAddress.get(i), mBusy.get(i), mID.get(i), image.get(i)));
         }
         // sort data by km
         Collections.sort(discoverListData, Comparator.comparingDouble(DiscoverListData ::getKm));
+        for(DiscoverListData model : discoverListData) {
+            System.out.println("name: " + model.getName() + " address: " + model.getAddress());
+
+        }
         // remove any attractions busyness that is null or >30%
         discoverListData.removeIf(n -> (n.getBusy() > 40));
         discoverListData.removeIf(n -> (n.getBusy() < 0));
@@ -216,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
         // put processed data into recyclerview
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mAddress, mDKmDou, mDID, mDBusy, mDImagee,this);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(mDName, mDImage, mDAddress, mDKmDou, mDID, mDBusy, mDImagee,this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);

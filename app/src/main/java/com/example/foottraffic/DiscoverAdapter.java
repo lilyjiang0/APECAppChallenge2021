@@ -54,8 +54,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHo
         Glide
                 .with(mContext)
                 .load(mImage.get(position))
-                .centerCrop()
                 .apply(new RequestOptions().override(600, 200))
+                .fitCenter()
                 .into(holder.image);
         holder.name.setText(mName.get(position));
         holder.km.setText(mKm.get(position) + " km");
