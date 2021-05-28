@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.foottraffic.api.APIClientActivity;
 import com.example.foottraffic.pojo.Attractions;
 import com.example.foottraffic.pojo.ForecastData;
+import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
@@ -55,6 +56,8 @@ public class GenerateTripActivity extends AppCompatActivity {
     private AutoCompleteTextView place3;
     private AutoCompleteTextView place4;
     private AutoCompleteTextView place5;
+    private TextView textView6;
+    private ExpandableRelativeLayout myExpandable;
     private CalendarView calendarView;
 
     private ArrayList<String> venueNames = new ArrayList<>(MainActivity.mName);
@@ -73,8 +76,8 @@ public class GenerateTripActivity extends AppCompatActivity {
     private Button btnGenerate;
 
     private Map<String, String> vNames = new HashMap<>();
-    private Map<String, Integer> vOpen = new HashMap<>();
-    private Map<String, Integer> vClose = new HashMap<>();
+//    private Map<String, Integer> vOpen = new HashMap<>();
+//    private Map<String, Integer> vClose = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +143,9 @@ public class GenerateTripActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (item.containsKey(place2.getText().toString())) {
+
                     getHourDataFromApi(place2.getText().toString(), item.get(place2.getText().toString()));
+                    System.out.println("try: " + place2.getText().toString() + item.get(place2.getText().toString()));
                     System.out.println(place2.getText().toString());
                     if (!vNames.containsKey("place2")) {
                         vNames.put("place2", place2.getText().toString());
@@ -150,7 +155,6 @@ public class GenerateTripActivity extends AppCompatActivity {
                     }
 //                    venueAddressParams.add(item.get(place2.getText().toString()));
                     quietHourParams.add(myDataList);
-                    System.out.println("Queit hours are: " + Arrays.toString(quietHourParams.toArray()));
 //                    detailParams.put("venue_name2", place2.getText().toString());
 //                    detailParams.put("quiet_hours2", Arrays.toString(myDataList.toArray()));
 //                    details.add(detailParams);
@@ -199,9 +203,21 @@ public class GenerateTripActivity extends AppCompatActivity {
                 intent.putStringArrayListExtra("venue_closed", venueClosedParams);
                 intent.putExtra("quietHourParams", (Serializable) quietHourParams);
                 intent.putExtra("dayOfWeek", dayOfWeek);
+                System.out.println("size" + venueOpenParams.size());
                 startActivity(intent);
             }
         });
+
+    }
+
+    public void showPlaceBox(View view) {
+        myExpandable = findViewById(R.id.expandable);
+        myExpandable.toggle();
+    }
+
+    public void hidePlaceBox(View view) {
+        myExpandable = findViewById(R.id.expandable);
+        myExpandable.collapse();
 
     }
 
@@ -225,14 +241,17 @@ public class GenerateTripActivity extends AppCompatActivity {
                         dayOfWeek = 6;
                     }
                     myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
-                    System.out.println(Arrays.toString(myDataList.toArray()));
-                    venueOpenParams.add(String.valueOf(vOpen.put("venue_open", result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen())));
-                    venueClosedParams.add(String.valueOf(vClose.put("venue_closed", result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueClosed())));
+//                    Collections.sort(myDataList);
+                    venueOpenParams.add(String.valueOf(result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen()));
+                    System.out.println("hey: " + String.valueOf(result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen()));
+                    venueClosedParams.add(String.valueOf(result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueClosed()));
                 }
             }
             @Override
             public void onFailure(Call<ForecastData> call, Throwable t) {
                 call.cancel();
+                venueOpenParams.add("Closed");
+                venueClosedParams.add("Closed");
                 Log.d("ERROR", "Api call failed. Message is: " + t.getMessage() + " Cause is: " + t.getCause());
     //            System.out.println(call.);
             }

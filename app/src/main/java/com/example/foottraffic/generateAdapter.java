@@ -2,8 +2,10 @@ package com.example.foottraffic;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
     private ArrayList<String> venueClosedParams = new ArrayList<>();
     private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
     private Integer dayOfWeek;
+    private ArrayList<String> suggestionHour = new ArrayList<>();
     private Context context;
 
     /**
@@ -39,6 +42,7 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         TextView quietHours;
         TextView day;
         TextView tradingHour;
+        TextView suggestion;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -46,15 +50,18 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
             this.quietHours = itemView.findViewById(R.id.quietHoursTv);
             this.day = itemView.findViewById(R.id.textView19);
             this.tradingHour = itemView.findViewById(R.id.textView21);
+            this.suggestion = itemView.findViewById(R.id.textView20);
         }
     }
 
-    public generateAdapter(ArrayList<String> venueNameParams, ArrayList<String> venueOpenParams, ArrayList<String> venueClosedParams, List<List<Integer>> quietHourParams, Integer dayOfWeek, Context context) {
+
+    public generateAdapter(ArrayList<String> venueNameParams, ArrayList<String> venueOpenParams, ArrayList<String> venueClosedParams, List<List<Integer>> quietHourParams, Integer dayOfWeek, ArrayList<String> suggestionHour, Context context) {
         this.venueNameParams = venueNameParams;
         this.venueOpenParams = venueOpenParams;
         this.venueClosedParams = venueClosedParams;
         this.quietHourParams = quietHourParams;
         this.dayOfWeek = dayOfWeek;
+        this.suggestionHour = suggestionHour;
         this.context = context;
     }
 
@@ -82,31 +89,30 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         if (quietHourParams.get(position).size() == 0) {
             holder.quietHours.setText("--");
         } else {
-            quietHourParams.get(position);
             holder.quietHours.setText(Arrays.toString(quietHourParams.get(position).toArray()));
         }
         String[] strDays = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
         holder.day.setText(strDays[dayOfWeek]);
-//        userEmail != null && (!TextUtils.equals(userEmail ,"null")) && (!TextUtils.isEmpty(userEmail))
-        System.out.println("it: " + Arrays.toString(venueOpenParams.stream().toArray()));
-//        if (TextUtils.isDigitsOnly(venueClosedParams.get(position)) == false) {
-//            holder.tradingHour.setText("It's closed today.");
-//        } else {
-        Integer closedTime = Integer.parseInt("0" + venueClosedParams.get(position).trim()) - 12;
-        System.out.println("int" + closedTime);
-        // Integer.parseInt( "0" + " ".trim())
+        System.out.println("heres" + venueOpenParams.size());
         try {
-            Integer closedPM = Integer.valueOf(venueClosedParams.get(position)) - 12;
-            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+            int closedPM = Integer.parseInt(venueClosedParams.get(position));
+            if (closedPM > 12) {
+                closedPM = closedPM - 12;
+            }
+            if (Integer.parseInt(venueOpenParams.get(position)) == 0 && Integer.parseInt(venueClosedParams.get(position)) == 0)  {
+                            holder.tradingHour.setText("All day");
+                            holder.tradingHour.setTextColor(Color.GREEN);
+            } else {
+                holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+            }
         } catch (NumberFormatException e) {
-            holder.tradingHour.setText("It's closed today.");
-        } catch (NullPointerException e) {
-            holder.tradingHour.setText("It's closed today.");
-        } catch (IndexOutOfBoundsException e) {
-            holder.tradingHour.setText("It's closed today.");
+            if (venueClosedParams.get(position).equals("Closed")) {
+                holder.tradingHour.setText("Closed");
+                holder.tradingHour.setTextColor(Color.RED);
+            }
         }
 
-//        }
+        holder.suggestion.setText(suggestionHour.get(position));
     }
 
     @Override

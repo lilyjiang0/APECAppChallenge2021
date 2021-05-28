@@ -172,10 +172,10 @@ public class AttractionQuietHours {
         private String dayText;
         @SerializedName("venue_closed")
         @Expose
-        private Integer venueClosed;
+        private String venueClosed;
         @SerializedName("venue_open")
         @Expose
-        private Integer venueOpen;
+        private String venueOpen;
 
         public Integer getDayInt() {
             return dayInt;
@@ -209,19 +209,19 @@ public class AttractionQuietHours {
             this.dayText = dayText;
         }
 
-        public Integer getVenueClosed() {
+        public String getVenueClosed() {
             return venueClosed;
         }
 
-        public void setVenueClosed(Integer venueClosed) {
+        public void setVenueClosed(String venueClosed) {
             this.venueClosed = venueClosed;
         }
 
-        public Integer getVenueOpen() {
+        public String getVenueOpen() {
             return venueOpen;
         }
 
-        public void setVenueOpen(Integer venueOpen) {
+        public void setVenueOpen(String venueOpen) {
             this.venueOpen = venueOpen;
         }
 
