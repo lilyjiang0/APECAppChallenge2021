@@ -23,6 +23,8 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
 
     private ArrayList<String> venueNameParams = new ArrayList<>();
     private ArrayList<String> venueAddressParams = new ArrayList<>();
+    private ArrayList<String> venueOpenParams = new ArrayList<>();
+    private ArrayList<String> venueClosedParams = new ArrayList<>();
     private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
     private Integer dayOfWeek;
     private Context context;
@@ -35,17 +37,21 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         TextView venueName;
         TextView quietHours;
         TextView day;
+        TextView tradingHour;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             this.venueName = itemView.findViewById(R.id.textView18);
             this.quietHours = itemView.findViewById(R.id.quietHoursTv);
             this.day = itemView.findViewById(R.id.textView19);
+            this.tradingHour = itemView.findViewById(R.id.textView21);
         }
     }
 
-    public generateAdapter(ArrayList<String> venueNameParams, List<List<Integer>> quietHourParams, Integer dayOfWeek, Context context) {
+    public generateAdapter(ArrayList<String> venueNameParams, ArrayList<String> venueOpenParams, ArrayList<String> venueClosedParams, List<List<Integer>> quietHourParams, Integer dayOfWeek, Context context) {
         this.venueNameParams = venueNameParams;
+        this.venueOpenParams = venueOpenParams;
+        this.venueClosedParams = venueClosedParams;
         this.quietHourParams = quietHourParams;
         this.dayOfWeek = dayOfWeek;
         this.context = context;
@@ -75,9 +81,18 @@ public class generateAdapter extends RecyclerView.Adapter<generateAdapter.ViewHo
         if (quietHourParams.get(position).size() == 0) {
             holder.quietHours.setText("--");
         } else {
+            quietHourParams.get(position);
             holder.quietHours.setText(Arrays.toString(quietHourParams.get(position).toArray()));
         }
-        holder.day.setText(String.valueOf(DayOfWeek.of(dayOfWeek + 1)));
+        String[] strDays = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        holder.day.setText(strDays[dayOfWeek]);
+        System.out.println("res is: " + venueOpenParams.get(position).toString());
+        if (venueOpenParams.get(position).isEmpty() || venueClosedParams.get(position).equals("") || venueClosedParams.get(position) == null) {
+            holder.tradingHour.setText("It's closed today.");
+        } else {
+            Integer closedPM = Integer.valueOf(venueClosedParams.get(position)) - 12;
+            holder.tradingHour.setText("Trading hour: " + venueOpenParams.get(position) + "am - " + closedPM + "pm");
+        }
     }
 
     @Override

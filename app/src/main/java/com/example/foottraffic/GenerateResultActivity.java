@@ -17,6 +17,8 @@ public class GenerateResultActivity extends AppCompatActivity {
 
     private ArrayList<String> venueNameParams = new ArrayList<>();
     private ArrayList<String> venueAddressParams = new ArrayList<>();
+    private ArrayList<String> venueOpenParams = new ArrayList<>();
+    private ArrayList<String> venueClosedParams = new ArrayList<>();
     private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
     private Integer dayOfWeek;
     private RecyclerView discoverRv;
@@ -26,24 +28,21 @@ public class GenerateResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_result);
-//        e.add("qqq");
-//        e.add("222");
         venueNameParams = getIntent().getStringArrayListExtra("venueNameParams");
-        System.out.println("It is: in another page: " + Arrays.toString(venueNameParams.toArray()));
         venueAddressParams = getIntent().getStringArrayListExtra("venueAddressParams");
+        venueOpenParams = getIntent().getStringArrayListExtra("venue_open");
+        venueClosedParams = getIntent().getStringArrayListExtra("venue_closed");
         quietHourParams = (List<List<Integer>>) getIntent().getSerializableExtra("quietHourParams");
         dayOfWeek = getIntent().getIntExtra("dayOfWeek", 0);
-//        System.out.println("name: " + venueNameParams.size());
-//        System.out.println("address: " + venueAddressParams.size());
-//        System.out.println("hour: " + quietHourParams.size());
-//        System.out.println("day: " + dayOfWeek);
+
+
         initGenerateResultRecyclerView();
     }
 
     private void initGenerateResultRecyclerView() {
         // initialise recyclerview for browse all list
         RecyclerView recyclerView = findViewById(R.id.discoverRv);
-        generateAdapter generateAdapter = new generateAdapter(venueNameParams, quietHourParams, dayOfWeek, GenerateResultActivity.this);
+        generateAdapter generateAdapter = new generateAdapter(venueNameParams, venueOpenParams, venueClosedParams, quietHourParams, dayOfWeek, GenerateResultActivity.this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

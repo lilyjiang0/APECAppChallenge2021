@@ -66,11 +66,15 @@ public class GenerateTripActivity extends AppCompatActivity {
     Map<String, String> detailParams = new HashMap<String, String>();
     private ArrayList<String> venueNameParams = new ArrayList<>();
     private ArrayList<String> venueAddressParams = new ArrayList<>();
+    private ArrayList<String> venueOpenParams = new ArrayList<>();
+    private ArrayList<String> venueClosedParams = new ArrayList<>();
     private List<List<Integer>> quietHourParams = new ArrayList<List<Integer>>();
     private Integer dayOfWeek;
     private Button btnGenerate;
 
     private Map<String, String> vNames = new HashMap<>();
+    private Map<String, Integer> vOpen = new HashMap<>();
+    private Map<String, Integer> vClose = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +195,8 @@ public class GenerateTripActivity extends AppCompatActivity {
 //                intent.putExtra("list", (Serializable) detailParams);
                 intent.putStringArrayListExtra("venueNameParams", venueNameParams);
                 intent.putStringArrayListExtra("venueAddressParams", venueAddressParams);
+                intent.putStringArrayListExtra("venue_open", venueOpenParams);
+                intent.putStringArrayListExtra("venue_closed", venueClosedParams);
                 intent.putExtra("quietHourParams", (Serializable) quietHourParams);
                 intent.putExtra("dayOfWeek", dayOfWeek);
                 startActivity(intent);
@@ -220,6 +226,8 @@ public class GenerateTripActivity extends AppCompatActivity {
                     }
                     myDataList = result.getAnalysis().get(dayOfWeek).getQuietHours();
                     System.out.println(Arrays.toString(myDataList.toArray()));
+                    venueOpenParams.add(String.valueOf(vOpen.put("venue_open", result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueOpen())));
+                    venueClosedParams.add(String.valueOf(vClose.put("venue_closed", result.getAnalysis().get(dayOfWeek).getDayInfo().getVenueClosed())));
                 }
             }
             @Override
